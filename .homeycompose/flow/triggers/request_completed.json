@@ -1,0 +1,31 @@
+{
+    "title": {
+        "en": "Request completed"
+    },
+    "tokens": [
+        {
+            "name": "responde_code",
+            "type": "number",
+            "title": {
+                "en": "Response Code"
+            },
+            "example": 200
+        },
+        {
+            "name": "body",
+            "type": "string",
+            "title": {
+                "en": "Response Body"
+            },
+            "example": "{\n'foo' : 'bar'\n\n}"
+        },
+        {
+            "name": "headers",
+            "type": "string",
+            "title": {
+                "en": "Response Headers"
+            },
+            "example": "{\n'foo' : 'bar'\n\n}"
+        }
+    ]
+}

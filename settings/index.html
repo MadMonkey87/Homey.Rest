@@ -1,0 +1,319 @@
+<html>
+
+<head>
+    <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+    <!--<script src='https://cdn.staticaly.com/gh/robertklep/homey-mocks/v0.0.4/homey-settings-mock.js'></script>-->
+    <!--<script src="js/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/animation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+    <div class="homeyAnimation"></div>
+
+    <nav>
+        <div class="nav nav-tabs glass-dark" id="nav-tab" role="tablist"
+            style="margin-left: 5px; margin-top: 5px; margin-right: 5px;">
+            <a class="nav-item nav-link active" id="nav-header-tab" data-toggle="tab" href="#nav-header" role="tab"
+                aria-controls="nav-header" aria-selected="true"
+                style="border-top-left-radius: 3px; border-bottom-left-radius: 3px;">Headers</a>
+            <a class="nav-item nav-link" id="nav-certificate-tab" data-toggle="tab" href="#nav-certificate" role="tab"
+                aria-controls="nav-certificate" aria-selected="false">Certificates</a>
+            <a class="nav-item nav-link" id="nav-about-tab" data-toggle="tab" href="#nav-about" role="tab"
+                aria-controls="nav-contact" aria-selected="false">About</a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-header" role="tabpanel" aria-labelledby="nav-header-tab">
+
+            <!-- header modal  begin-->
+            <div class="modal fade" id="createHeaderCollectionModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Header Collection</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="newHeaderCollectionName">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label>Description</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="newHeaderCollectionDescription">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <ul class="list-group list-group-flush" id="newHeaderCollectionHeaders">
+                            </ul>
+
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label>New Header Name</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="newHeaderItemName">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label>New Header Value</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="newHeaderItemValue">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group" style="margin-bottom: 0"></div>
+                                    <button type="button" class="btn btn-primary float-right"
+                                        id="newHeaderItemSaveButton">
+                                        Add Header to Collection
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                id="newHeaderCollectionSaveButton">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--header modal end-->
+
+            <!--header tab begin-->
+            <div class="card glass" style="margin-top: 10px;">
+                <div class="card-body">
+                    <p class="card-text">If you need to send specific headers with your request you can create a header
+                        collection here then choose this collection in your flow card. In case you need to set the
+                        headers dynamically there are also flow cards available that manipulate these header collections
+                        here.</p>
+                    <p>Hint: some headers will be set automatically, i.e the Content-Length</p>
+
+                    <div class="row">
+                        <div class="col-sm">
+                            <button type="button" class="btn btn-primary float-right"
+                                id="createHeaderCollectionModalButton" style="width: 125px;" data-toggle="modal"
+                                data-target="#createHeaderCollectionModal">Add
+                                Collection</button>
+                        </div>
+                    </div>
+                    <br>
+
+                    <ul class="list-group list-group-flush" id="headerCollection">
+                    </ul>
+                </div>
+            </div>
+            <!--header tab end-->
+
+        </div>
+
+        <div class="tab-pane fade" id="nav-certificate" role="tabpanel" aria-labelledby="nav-certificate-tab">
+
+            <!--certificates tab begin-->
+            <div class="card glass" style="margin-top: 10px;">
+                <div class="card-body">
+                </div>
+            </div>
+            <!--certificates tab end-->
+
+        </div>
+
+        <div class="tab-pane fade" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
+
+            <!--about tab begin-->
+            <div class="card glass" style="margin-top: 10px;">
+                <div class="card-body">
+                    <h5 class="card-title">Advanced Rest Client (ARC) for homey v1.0.0</h5>
+                    <h3 class="card-title">© Philippe Wechsler 2020</h3>
+                    <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
+                        from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+                </div>
+            </div>
+
+            <!--about tab end-->
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        function onHomeyReady(Homey) {
+
+            if (Homey.isMock) {
+                //Homey.alert('Warning: Homey is mocked only!!!');
+            }
+
+            // headers main
+
+            let headerCollections = [];
+
+            function renderHeaderCollections() {
+                let collectionMarkup = '';
+                for (var i = 0; i < headerCollections.length; i++) {
+                    collectionMarkup += `
+                        <li class="list-group-item transparent">
+                            <div class="form-group">
+                                <label style="font-weight: bold; font-size: 18px; margin-top: 5px">${headerCollections[i].name}</label>
+                                <button type="button" class="btn btn-secondary float-right" style="margin-top: 25px; height: 42px; width: 42px"><span
+                                        class="fa fa-trash" onclick="removeHeaderCollection(${i})"></span></button>
+                                <button type="button" class="btn btn-primary float-right" style="margin-top: 25px; height: 42px; width: 42px" data-toggle="modal" data-target="#createHeaderCollectionModal" onclick="editHeaderCollection(${i})"><span
+                                        class="fa fa-edit"></span></button>
+                                        <small class="form-text text-muted">${headerCollections[i].description}</small>
+                            </div>
+                        </li>
+                    `;
+                }
+                document.getElementById('headerCollection').innerHTML = collectionMarkup;
+            }
+
+            window.removeHeaderCollection = function (e) {
+                headerCollections.splice(e, 1);
+                renderHeaderCollections();
+                persistHeaderCollections();
+            }
+
+            window.editHeaderCollection = function (e) {
+                this.selectedHeaderCollection = { ...headerCollections[e] };
+                renderSelectedHeaderCollection();
+            }
+
+            persistHeaderCollections = function () {
+                Homey.set('headerCollections', headerCollections, (err, result) => {
+                    if (err) return Homey.alert(err);
+                })
+            }
+
+            // create/edit headers dialog
+
+            let selectedHeaderCollection = {};
+
+            document.getElementById('newHeaderCollectionSaveButton').addEventListener('click', (e) => {
+                if (this.selectedHeaderCollection.id == null) {
+                    this.selectedHeaderCollection.id = generateGuid();
+                    headerCollections.push(this.selectedHeaderCollection);
+                } else {
+                    for (var i = 0; i < headerCollections.length; i++) {
+                        if (headerCollections[i].id === this.selectedHeaderCollection.id) {
+                            headerCollections[i] = this.selectedHeaderCollection;
+                            break;
+                        }
+                    }
+                }
+                renderHeaderCollections();
+                persistHeaderCollections();
+            });
+
+            document.getElementById('createHeaderCollectionModalButton').addEventListener('click', (e) => {
+                this.selectedHeaderCollection = { name: '', description: '', headers: [], id: null };
+                renderSelectedHeaderCollection();
+            });
+
+            document.getElementById('newHeaderItemSaveButton').addEventListener('click', (e) => {
+                this.selectedHeaderCollection.headers.push({ name: document.getElementById('newHeaderItemName').value, value: document.getElementById('newHeaderItemValue').value });
+                document.getElementById('newHeaderItemName').value = '';
+                document.getElementById('newHeaderItemValue').value = '';
+                renderSelectedHeaderCollection();
+            });
+
+            document.getElementById('newHeaderCollectionName').addEventListener('input', (e) => { updateHeaderCollectionForm() });
+            document.getElementById('newHeaderCollectionDescription').addEventListener('input', (e) => { updateHeaderCollectionForm() });
+            document.getElementById('newHeaderItemName').addEventListener('input', (e) => { updateHeaderCollectionForm() });
+            document.getElementById('newHeaderItemValue').addEventListener('input', (e) => { updateHeaderCollectionForm() });
+
+            function updateHeaderCollectionForm() {
+                this.selectedHeaderCollection.name = document.getElementById('newHeaderCollectionName').value;
+                this.selectedHeaderCollection.description = document.getElementById('newHeaderCollectionDescription').value;
+
+
+                document.getElementById('newHeaderCollectionSaveButton').disabled = this.selectedHeaderCollection.name.length < 3 || this.selectedHeaderCollection.headers.length == 0;
+                document.getElementById('newHeaderItemSaveButton').disabled = document.getElementById('newHeaderItemName').value.length < 1;
+            }
+
+            function renderSelectedHeaderCollection() {
+                document.getElementById('newHeaderCollectionName').value = this.selectedHeaderCollection.name;
+                document.getElementById('newHeaderCollectionDescription').value = this.selectedHeaderCollection.description;
+                let headerMarkup = '';
+                for (var i = 0; i < this.selectedHeaderCollection.headers.length; i++) {
+                    headerMarkup += `
+                        <li class="list-group-item transparent">
+                            <div class="form-group">
+                                <small class="form-text text-muted">${this.selectedHeaderCollection.headers[i].name}</small>
+                                <label style="font-weight: bold; font-size: 18px;">${this.selectedHeaderCollection.headers[i].value}</label>
+                                <button type="button" class="btn btn-secondary float-right" style="width: 42px; height: 42px" onclick="removeHeaderCollectionItem(${i})">
+                                    <span class="fa fa-trash"></span>
+                                </button>
+                            </div>
+                        </li>
+                    `;
+                }
+                document.getElementById('newHeaderCollectionHeaders').innerHTML = headerMarkup;
+                updateHeaderCollectionForm();
+            }
+
+            window.removeHeaderCollectionItem = function (e) {
+                this.selectedHeaderCollection.headers.splice(e, 1);
+                renderSelectedHeaderCollection();
+            }
+
+            // utils
+
+            function generateGuid() {
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            }
+
+            if (Homey.isMock) {
+                headerCollections.push({ id: '1', name: "sample collection 1", description: "a very simple collection for demonstration purposes", headers: [{ name: 'header-1', value: 'value-1' }, { name: 'header-2', value: 'value-2' }, { name: 'header-3', value: 'value-3' }] });
+                headerCollections.push({ id: '2', name: "sample collection 2", description: "a very simple collection for demonstration purposes", headers: [{ name: 'header-1', value: 'value-1' }, { name: 'header-2', value: 'value-2' }, { name: 'header-3', value: 'value-3' }] });
+                headerCollections.push({ id: '3', name: "sample collection 3", description: "a very simple collection for demonstration purposes", headers: [{ name: 'header-1', value: 'value-1' }, { name: 'header-2', value: 'value-2' }, { name: 'header-3', value: 'value-3' }] });
+                renderHeaderCollections();
+            } else {
+                Homey.get('headerCollections', (err, result) => {
+                    if (err) return Homey.alert(err);
+                    if (result) {
+                        headerCollections = result;
+                    }
+                    renderHeaderCollections();
+                })
+            }
+
+            Homey.ready();
+        }
+
+    </script>
+</body>
+
+</html>

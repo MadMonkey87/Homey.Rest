@@ -1,0 +1,24 @@
+{
+  "id": "ch.philippewechsler.rest",
+  "version": "1.0.0",
+  "compatibility": ">=4.0.0",
+  "brandColor": "#ff4800",
+  "sdk": 2,
+  "name": {
+    "en": "Advanced Rest Client (ARC)"
+  },
+  "description": {
+    "en": "Provides some flow cards that allows you to perform some restfull calls with advanced features such as certificate hanlding, authentication, custom headers and much more"
+  },
+  "category": [
+    "tools"
+  ],
+  "permissions": [],
+  "images": {
+    "large": "/assets/images/large.png",
+    "small": "/assets/images/small.png"
+  },
+  "author": {
+    "name": "Philippe Wechsler"
+  }
+}

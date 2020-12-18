@@ -1,0 +1,131 @@
+{
+    "title": {
+        "en": "Perform a request"
+    },
+    "args": [
+        {
+            "type": "text",
+            "name": "url",
+            "title": {
+                "en": "Url"
+            }
+        },
+        {
+            "type": "dropdown",
+            "name": "verb",
+            "title": {
+                "en": "Http Verb"
+            },
+            "values": [
+                {
+                    "id": "GET",
+                    "label": {
+                        "en": "Get"
+                    }
+                },
+                {
+                    "id": "POST",
+                    "label": {
+                        "en": "Post"
+                    }
+                },
+                {
+                    "id": "PUT",
+                    "label": {
+                        "en": "Put"
+                    }
+                },
+                {
+                    "id": "PATCH",
+                    "label": {
+                        "en": "Patch"
+                    }
+                },
+                {
+                    "id": "DELETE",
+                    "label": {
+                        "en": "Delete"
+                    }
+                }
+            ]
+        },
+        {
+            "type": "dropdown",
+            "name": "bodytype",
+            "title": {
+                "en": "Body Type"
+            },
+            "values": [
+                {
+                    "id": "none",
+                    "label": {
+                        "en": "None"
+                    }
+                },
+                {
+                    "id": "text",
+                    "label": {
+                        "en": "Text"
+                    }
+                },
+                {
+                    "id": "json",
+                    "label": {
+                        "en": "Json"
+                    }
+                },
+                {
+                    "id": "js",
+                    "label": {
+                        "en": "Java Script"
+                    }
+                },
+                {
+                    "id": "html",
+                    "label": {
+                        "en": "HTML"
+                    }
+                },
+                {
+                    "id": "xml",
+                    "label": {
+                        "en": "XML"
+                    }
+                }
+            ]
+        },
+        {
+            "type": "text",
+            "name": "body",
+            "title": {
+                "en": "Body"
+            },
+            "placeholder": {
+                "en": "{\n    \"foo\" : \"bar\"\n}"
+            }
+        },
+        {
+            "type": "autocomplete",
+            "name": "headercollection",
+            "placeholder": {
+                "en": "custom headers"
+            },
+            "title": {
+                "en": "Custom Headers"
+            }
+        },
+        {
+            "type": "number",
+            "name": "timeout",
+            "min": 1,
+            "max": 300,
+            "step": 1,
+            "placeholder": {
+                "en": "in seconds"
+            },
+            "title": {
+                "en": "Timeout"
+            }
+        }
+    ]
+}
