@@ -94,8 +94,7 @@ class AdvancedRestClient extends Homey.App {
           path: url.path,
           method: args.verb,
           rejectUnauthorized: false,
-          headers: headers,
-          timeout: args.timeout * 1000
+          headers: headers
         };
 
         this.log('options', options)
