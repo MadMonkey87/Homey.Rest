@@ -16,8 +16,8 @@
   ],
   "permissions": [],
   "images": {
-    "large": "/assets/images/large.png",
-    "small": "/assets/images/small.png"
+    "large": "/assets/images/Large.png",
+    "small": "/assets/images/Small.png"
   },
   "author": {
     "name": "Philippe Wechsler"
