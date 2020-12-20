@@ -1,0 +1,34 @@
+{
+    "title": {
+        "en": "Add/Update value in Header Collection"
+    },
+    "titleFormatted": {
+        "en": "Set [[name]] to [[value]] in the collection [[headercollection]]"
+    },
+    "hint": {
+        "en": "Adds or updates a header in a header collection"
+    },
+    "args": [
+        {
+            "type": "autocomplete",
+            "name": "headercollection",
+            "title": {
+                "en": "Header collection"
+            }
+        },
+        {
+            "type": "text",
+            "name": "name",
+            "title": {
+                "en": "Header name"
+            }
+        },
+        {
+            "type": "text",
+            "name": "value",
+            "title": {
+                "en": "Header value"
+            }
+        }
+    ]
+}
