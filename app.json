@@ -43,7 +43,7 @@
           "en": "Request completed"
         },
         "hint": {
-          "en": "Gets triggered when the 'Perform a request' flow card has completed it's request"
+          "en": "Gets triggered when the 'Perform a request' flow card has completed it's request\nNote: this also gets triggered when the server responds with an error message."
         },
         "tokens": [
           {
@@ -69,9 +69,52 @@
               "en": "Response Headers"
             },
             "example": "{\n'foo' : 'bar'\n\n}"
+          },
+          {
+            "name": "request_url",
+            "type": "string",
+            "title": {
+              "en": "Request Url"
+            },
+            "example": "https://example:443/some/path?foo=bar"
           }
         ],
         "id": "request_completed"
+      },
+      {
+        "title": {
+          "en": "Request failed"
+        },
+        "hint": {
+          "en": "Gets triggered when the 'Perform a request' flow card has failed.\nNote: this does not apply if the server responded with an error message."
+        },
+        "tokens": [
+          {
+            "name": "error_message",
+            "type": "string",
+            "title": {
+              "en": "Error message"
+            },
+            "example": "getaddrinfo ENOTFOUND notexistingurl"
+          },
+          {
+            "name": "error_code",
+            "type": "string",
+            "title": {
+              "en": "Error Code"
+            },
+            "example": "ENOTFOUND"
+          },
+          {
+            "name": "request_url",
+            "type": "string",
+            "title": {
+              "en": "Request Url"
+            },
+            "example": "https://example:443/some/path?foo=bar"
+          }
+        ],
+        "id": "request_failed"
       }
     ],
     "actions": [
