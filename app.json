@@ -85,9 +85,47 @@
         "title": {
           "en": "Request failed"
         },
+        "titleFormatted": {
+          "en": "Request failed with [[error]] error"
+        },
         "hint": {
           "en": "Gets triggered when the 'Perform a request' flow card has failed.\nNote: this does not apply if the server responded with an error message."
         },
+        "args": [
+          {
+            "type": "dropdown",
+            "name": "error",
+            "title": {
+              "en": "Error"
+            },
+            "values": [
+              {
+                "id": "any",
+                "label": {
+                  "en": "Any"
+                }
+              },
+              {
+                "id": "ENOTFOUND",
+                "label": {
+                  "en": "Host not found"
+                }
+              },
+              {
+                "id": "ECONNRESET",
+                "label": {
+                  "en": "Connection reseted"
+                }
+              },
+              {
+                "id": "ECONNREFUSED",
+                "label": {
+                  "en": "Connection refused"
+                }
+              }
+            ]
+          }
+        ],
         "tokens": [
           {
             "name": "error_message",

@@ -12,7 +12,11 @@ class AdvancedRestClient extends Homey.App {
     this.log('Advanced Rest Client has been initialized');
 
     let requestCompletedTrigger = new Homey.FlowCardTrigger('request_completed').register();
-    let requestFailedTrigger = new Homey.FlowCardTrigger('request_failed').register();
+    let requestFailedTrigger = new Homey.FlowCardTrigger('request_failed')
+      .registerRunListener((args, state) => {
+        return Promise.resolve(args.error === 'any' || args.error === state.error_code);
+      })
+      .register();
 
     let performRequestAction = new Homey.FlowCardAction('perform_request');
     performRequestAction
@@ -115,7 +119,7 @@ class AdvancedRestClient extends Homey.App {
 
           }).on('error', (err) => {
             console.log("Error: " + JSON.stringify(err));
-            requestCompletedTrigger.trigger({ error_message: err.data.message, error_code: err.data.code, request_url: url });
+            requestFailedTrigger.trigger({ error_message: err.data.message, error_code: err.data.code, request_url: args.url });
             resolve(false);
           }).write(args.body)
         });
