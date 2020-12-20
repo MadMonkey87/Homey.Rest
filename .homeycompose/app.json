@@ -1,6 +1,6 @@
 {
   "id": "ch.philippewechsler.rest",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "compatibility": ">=4.0.0",
   "brandColor": "#ff4800",
   "sdk": 2,
@@ -27,5 +27,12 @@
         "name": "MadMonkey87"
       }
     ]
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "madmonkey87"
+      }
+    }
   }
 }

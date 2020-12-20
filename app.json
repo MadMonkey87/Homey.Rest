@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "ch.philippewechsler.rest",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "compatibility": ">=4.0.0",
   "brandColor": "#ff4800",
   "sdk": 2,
@@ -29,11 +29,21 @@
       }
     ]
   },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "madmonkey87"
+      }
+    }
+  },
   "flow": {
     "triggers": [
       {
         "title": {
           "en": "Request completed"
+        },
+        "hint": {
+          "en": "Gets triggered when the 'Perform a request' flow card has completed it's request"
         },
         "tokens": [
           {
@@ -69,13 +79,20 @@
         "title": {
           "en": "Perform a request"
         },
+        "titleFormatted": {
+          "en": "[[verb]] [[url]] with body [[bodytype]]"
+        },
+        "hint": {
+          "en": "Performs a request with various options. Important: there is a separate trigger card available where you can handle the result of the request!"
+        },
         "args": [
           {
             "type": "text",
             "name": "url",
             "title": {
-              "en": "Url"
-            }
+              "en": "Url - should contain the protocol (http or https), the host, optionally the port, the path and optionally query parameters"
+            },
+            "placeholder": "https://example:443/some/path?foo=bar"
           },
           {
             "type": "dropdown",
@@ -120,7 +137,7 @@
             "type": "dropdown",
             "name": "bodytype",
             "title": {
-              "en": "Body Type"
+              "en": "Body Type  - describes the content you define in the 'Body' field bellow. Choose 'none' if you do not want to send a body (i.e for GET requests)"
             },
             "values": [
               {
@@ -165,7 +182,7 @@
             "type": "text",
             "name": "body",
             "title": {
-              "en": "Body"
+              "en": "Body - payload of the request in the format defined above"
             },
             "placeholder": {
               "en": "{\n    \"foo\" : \"bar\"\n}"
@@ -174,11 +191,8 @@
           {
             "type": "autocomplete",
             "name": "headercollection",
-            "placeholder": {
-              "en": "custom headers"
-            },
             "title": {
-              "en": "Custom Headers"
+              "en": "Header collection - if you need to use specific headers you should go to the app configuration and define a header collection there. After that you can choose the header collection here. Choose 'Default' if you do not need custom headers."
             }
           }
         ],
