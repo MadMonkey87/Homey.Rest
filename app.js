@@ -174,6 +174,47 @@ class AdvancedRestClient extends Homey.App {
         });
       });
 
+    let removeHeaderCollectionItemAction = new Homey.FlowCardAction('header_collection_remove');
+    removeHeaderCollectionItemAction
+      .register()
+      .registerRunListener(async (args, state) => {
+        return new Promise((resolve) => {
+          let headerCollections = Homey.ManagerSettings.get('headerCollections');
+          if (headerCollections == undefined || headerCollections === null) {
+            headerCollections = [];
+          }
+
+          for (var i = 0; i < headerCollections.length; i++) {
+            if (headerCollections[i].id == args.headercollection.id) {
+              let headerCollection = headerCollections[i];
+              let headers = headerCollection.headers;
+
+              for (var j = 0; j < headers.length; j++) {
+                if (headers[j].name.toLowerCase() === args.name.toLowerCase()) {
+                  headers.splice(j, 1);
+                  break;
+                }
+              }
+
+              break;
+            }
+          }
+          Homey.ManagerSettings.set('headerCollections', headerCollections);
+
+          resolve(true)
+        });
+      })
+      .getArgument('headercollection')
+      .registerAutocompleteListener((query, args) => {
+        return new Promise((resolve) => {
+          let headerCollections = Homey.ManagerSettings.get('headerCollections');
+          if (headerCollections == undefined || headerCollections === null) {
+            headerCollections = [];
+          }
+          resolve(headerCollections);
+        });
+      });
+
   }
 }
 

@@ -77,7 +77,7 @@
     "actions": [
       {
         "title": {
-          "en": "Add/Update value in Header Collection"
+          "en": "Add/Update a value in Header Collection"
         },
         "titleFormatted": {
           "en": "Set [[name]] to [[value]] in the collection [[headercollection]]"
@@ -109,6 +109,34 @@
           }
         ],
         "id": "header_collection_add"
+      },
+      {
+        "title": {
+          "en": "Remove a value from a Header Collection"
+        },
+        "titleFormatted": {
+          "en": "Remove [[name]] from the collection [[headercollection]]"
+        },
+        "hint": {
+          "en": "Removes a header from a header collection"
+        },
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "headercollection",
+            "title": {
+              "en": "Header collection"
+            }
+          },
+          {
+            "type": "text",
+            "name": "name",
+            "title": {
+              "en": "Header name"
+            }
+          }
+        ],
+        "id": "header_collection_remove"
       },
       {
         "title": {

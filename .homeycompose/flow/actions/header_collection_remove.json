@@ -1,12 +1,12 @@
 {
     "title": {
-        "en": "Add/Update a value in Header Collection"
+        "en": "Remove a value from a Header Collection"
     },
     "titleFormatted": {
-        "en": "Set [[name]] to [[value]] in the collection [[headercollection]]"
+        "en": "Remove [[name]] from the collection [[headercollection]]"
     },
     "hint": {
-        "en": "Adds or updates a header in a header collection"
+        "en": "Removes a header from a header collection"
     },
     "args": [
         {
@@ -21,13 +21,6 @@
             "name": "name",
             "title": {
                 "en": "Header name"
-            }
-        },
-        {
-            "type": "text",
-            "name": "value",
-            "title": {
-                "en": "Header value"
             }
         }
     ]
