@@ -108,7 +108,7 @@ class AdvancedRestClient extends Homey.App {
             });
 
             resp.on('end', () => {
-              requestCompletedTrigger.trigger({ responde_code: resp.statusCode, body: data, headers: JSON.stringify(resp.headers) });
+              requestCompletedTrigger.trigger({ responde_code: resp.statusCode, body: data, headers: JSON.stringify(resp.headers), request_url: url });
               resolve(true);
             });
 

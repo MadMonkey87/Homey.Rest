@@ -29,6 +29,14 @@
                 "en": "Response Headers"
             },
             "example": "{\n'foo' : 'bar'\n\n}"
+        },
+        {
+            "name": "request_url",
+            "type": "string",
+            "title": {
+                "en": "Request Url"
+            },
+            "example": "https://example:443/some/path?foo=bar"
         }
     ]
 }
