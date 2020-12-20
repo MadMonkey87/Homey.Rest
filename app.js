@@ -2,14 +2,24 @@
 
 const Homey = require('homey');
 
-const http = require('http')
-const https = require('https')
-const urlParser = require('url')
-const { util } = require('./util')
+const http = require('http');
+const https = require('https');
+const urlParser = require('url');
+const { util } = require('./util');
+const fs = require('fs');
 
 class AdvancedRestClient extends Homey.App {
   async onInit() {
+    const persistendFolder = '/userdata/';
     this.log('Advanced Rest Client has been initialized');
+
+    this.log('Listing files...');
+    fs.readdir(persistendFolder, (err, fileNames) => {
+      fileNames.forEach(fileName => {
+        this.log(fileName + '(' + util.getFileSizeInBytes(persistendFolder + fileName) + ' Bytes)');
+      });
+    });
+    this.log('...done!');
 
     let requestCompletedTrigger = new Homey.FlowCardTrigger('request_completed').register();
     let requestFailedTrigger = new Homey.FlowCardTrigger('request_failed')
