@@ -385,64 +385,82 @@
             let selectedCertificate = {};
 
             document.getElementById('newCertificateSaveButton').addEventListener('click', (e) => {
-                alert('todo: persist');
+                alert(JSON.stringify(this.selectedCertificate));
+                Homey.api('POST', '/certificate', this.selectedCertificate, function (err, result) {
+                    if (err) {
+                        alert('error');
+                    } else {
+                        alert('success');
+                    }
+                })
             });
 
             document.getElementById('createCertificateModalButton').addEventListener('click', (e) => {
-                this.selectedCertificate = { name: '', description: '' };
+                this.selectedCertificate = { name: '', description: '', credential: 'password', password: '', certificateFile: null, keyFile: null, keyFileName: null };
                 renderSelectedCertificate();
-            });
-
-            document.getElementById('certificateFile').addEventListener('change', onCertificateFileChanged, false);
-
-            function onCertificateFileChanged(e) {
-                let file = e.target.files[0];
-                document.getElementById('certificateName').value = file.name;
-
-                for (var i = 0, f; f = e.target.files[i]; i++) {
-                    var reader = new FileReader();
-                    reader.onload = function (theFileData) {
-                        alert(theFileData.target.result);
-                    }
-                    reader.readAsDataURL(f);
-                }
-            }
-
-            document.getElementById('certificateCredentialPassword').addEventListener('change', (e) => {
-                document.getElementById('certificateCredentialPasswordInput').style.display = 'flex';
-                document.getElementById('certificateCredentialKeyFileInput').style.display = 'none';
-            });
-
-            document.getElementById('certificateCredentialKeyFile').addEventListener('change', (e) => {
-                document.getElementById('certificateCredentialPasswordInput').style.display = 'none';
-                document.getElementById('certificateCredentialKeyFileInput').style.display = 'flex';
             });
 
             document.getElementById('certificateName').addEventListener('input', (e) => { updateCertificateForm() });
             document.getElementById('certificateDescription').addEventListener('input', (e) => { updateCertificateForm() });
-            //document.getElementById('certificateCredentialPassword').addEventListener('input', (e) => { updateCertificateForm() });
-            //document.getElementById('certificateCredentialKeyFile').addEventListener('input', (e) => { updateCertificateForm() });
+            document.getElementById('certificateCredentialPassword').addEventListener('change', (e) => { this.selectedCertificate.credential = 'password'; renderSelectedCertificate() });
+            document.getElementById('certificateCredentialKeyFile').addEventListener('change', (e) => { this.selectedCertificate.credential = 'keyfile'; renderSelectedCertificate() });
+            document.getElementById('certificatePassword').addEventListener('change', (e) => { updateCertificateForm() });
+            document.getElementById('certificateFile').addEventListener('change', onCertificateFileChanged);
+            document.getElementById('certificateKeyFile').addEventListener('change', onCertificateKeyFileChanged);
 
             function updateCertificateForm() {
                 this.selectedCertificate.name = document.getElementById('certificateName').value;
                 this.selectedCertificate.description = document.getElementById('certificateDescription').value;
+                this.selectedCertificate.password = document.getElementById('certificatePassword').value;
 
-                document.getElementById('newCertificateSaveButton').disabled = true;
+                document.getElementById('newCertificateSaveButton').disabled = this.selectedCertificate.certificateFile == null || this.selectedCertificate.name.length < 3 || this.selectedCertificate.description.length < 3 || (this.selectedCertificate.credential === 'password' && this.selectedCertificate.password.length < 1) || (this.selectedCertificate.credential === 'keyfile' && this.selectedCertificate.keyFile == null);
+            }
+
+            function onCertificateFileChanged(e) {
+                const file = e.target.files[0];
+                var reader = new FileReader();
+                reader.onload = function (data) {
+                    setCertificateFileContent(file.name, data.target.result);
+                }
+                reader.readAsDataURL(file);
+            }
+
+            function setCertificateFileContent(filename, content) {
+                this.selectedCertificate.name = filename;
+                this.selectedCertificate.certificateFile = content;
+                renderSelectedCertificate();
+            }
+
+            function onCertificateKeyFileChanged(e) {
+                const file = e.target.files[0];
+                var reader = new FileReader();
+                reader.onload = function (data) {
+                    setCertificateKeyFileContent(file.name, data.target.result);
+                }
+                reader.readAsDataURL(file);
+            }
+
+            function setCertificateKeyFileContent(filename, content) {
+                this.selectedCertificate.keyFileName = filename;
+                this.selectedCertificate.keyFile = content;
+                renderSelectedCertificate();
             }
 
             function renderSelectedCertificate() {
                 document.getElementById('certificateName').value = this.selectedCertificate.name;
                 document.getElementById('certificateDescription').value = this.selectedCertificate.description;
+                if (this.selectedCertificate.credential == 'password') {
+                    document.getElementById('certificateCredentialPasswordInput').style.display = 'flex';
+                    document.getElementById('certificateCredentialKeyFileInput').style.display = 'none';
+                    document.getElementById('certificateCredentialPassword').checked = true;
+                } else if (this.selectedCertificate.credential == 'keyfile') {
+                    document.getElementById('certificateCredentialPasswordInput').style.display = 'none';
+                    document.getElementById('certificateCredentialKeyFileInput').style.display = 'flex';
+                    document.getElementById('certificateCredentialKeyFile').checked = true;
+                }
+                document.getElementById('certificatePassword').value = this.selectedCertificate.password;
                 updateCertificateForm();
             }
-
-
-
-
-
-
-
-
 
             // utils
 

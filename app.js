@@ -232,6 +232,11 @@ class AdvancedRestClient extends Homey.App {
       });
 
   }
+
+  addCertificate (args){
+    this.log('add certificate')
+    this.log(args)
+  }
 }
 
 module.exports = AdvancedRestClient;
