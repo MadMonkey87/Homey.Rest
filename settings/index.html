@@ -1,8 +1,8 @@
 <html>
 
 <head>
-    <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
-    <!--<script src='https://cdn.staticaly.com/gh/robertklep/homey-mocks/v0.0.4/homey-settings-mock.js'></script>-->
+    <!--<script type="text/javascript" src="/homey.js" data-origin="settings"></script>-->
+    <script src='https://cdn.staticaly.com/gh/robertklep/homey-mocks/v0.0.4/homey-settings-mock.js'></script>
     <!--<script src="js/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>-->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -43,7 +43,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Header Collection</h5>
+                            <h5 class="modal-title">Header Collection</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -141,12 +141,12 @@
 
         <div class="tab-pane fade" id="nav-certificate" role="tabpanel" aria-labelledby="nav-certificate-tab">
 
-            <!-- certificate modal  begin-->
+            <!-- certificate create modal  begin-->
             <div class="modal fade" id="createCertificateModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Certificate</h5>
+                            <h5 class="modal-title">Certificate</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -220,7 +220,78 @@
                     </div>
                 </div>
             </div>
-            <!--certificate modal end-->
+            <!--certificate create modal end-->
+
+            <!-- certificate detail modal  begin-->
+            <div class="modal fade" id="certificateDetailModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Certificate</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <small class="form-text text-muted">Name</small>
+                                        <label style="font-weight: bold; font-size: 18px;"
+                                            id="certificateDetailName"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <small class="form-text text-muted">Description</small>
+                                        <label style="font-weight: bold; font-size: 18px;"
+                                            id="certificateDetailDescription"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <small class="form-text text-muted">Size</small>
+                                        <label style="font-weight: bold; font-size: 18px;"
+                                            id="certificateDetailSize"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <small class="form-text text-muted">Hash (SHA256)</small>
+                                        <label style="font-weight: bold; font-size: 18px;"
+                                            id="certificateDetailHash"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <small class="form-text text-muted">Credentials</small>
+                                        <label style="font-weight: bold; font-size: 18px;"
+                                            id="certificateDetailCredential1"></label>
+                                        <label style="font-weight: bold; font-size: 18px;"
+                                            id="certificateDetailCredential2"></label>
+                                        <label style="font-weight: bold; font-size: 18px;"
+                                            id="certificateDetailCredential3"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <!--<button type="button" class="btn btn-primary" data-dismiss="modal"
+                                id="deleteCertificateButton">Delete</button>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--certificate detail modal end-->
 
             <!--certificate tab begin-->
             <div class="card glass" style="margin-top: 10px;">
@@ -236,7 +307,7 @@
                     </div>
                     <br>
 
-                    <ul class="list-group list-group-flush" id="certificateCollection">
+                    <ul class="list-group list-group-flush" id="certificateList">
                     </ul>
                 </div>
             </div>
@@ -380,6 +451,46 @@
                 renderSelectedHeaderCollection();
             }
 
+            // certificates main
+
+            let certificates = [];
+
+            function renderCertificates() {
+                let collectionMarkup = '';
+                for (var i = 0; i < certificates.length; i++) {
+                    collectionMarkup += `
+                        <li class="list-group-item transparent">
+                            <div class="form-group">
+                                <label style="font-weight: bold; font-size: 18px; margin-top: 5px">${certificates[i].name}</label>
+                                <button type="button" class="btn btn-secondary float-right" style="margin-top: 25px; height: 42px; width: 42px"><span
+                                        class="fa fa-trash" onclick="removeCertificate(${i})"></span></button>
+                                <button type="button" class="btn btn-primary float-right" style="margin-top: 25px; height: 42px; width: 42px" data-toggle="modal" data-target="#certificateDetailModal" onclick="editCertificate(${i})"><span
+                                        class="fa fa-info"></span></button>
+                                        <small class="form-text text-muted">${certificates[i].description}</small>
+                            </div>
+                        </li>
+                    `;
+                }
+                document.getElementById('certificateList').innerHTML = collectionMarkup;
+            }
+
+            window.removeCertificate = function (e) {
+                certificates.splice(e, 1);
+                renderCertificates();
+                //persistCertificates();
+            }
+
+            window.editCertificate = function (e) {
+                const selectedCertificate = certificates[e];
+                document.getElementById('certificateDetailName').innerHTML = selectedCertificate.name;
+                document.getElementById('certificateDetailDescription').innerHTML = selectedCertificate.description;
+                document.getElementById('certificateDetailSize').innerHTML = selectedCertificate.size + ' bytes';
+                document.getElementById('certificateDetailHash').innerHTML = selectedCertificate.certificateFileName;
+                document.getElementById('certificateDetailCredential1').innerHTML = 'Mode: ' + selectedCertificate.credential === 'password' ? 'password' : 'key file';
+                document.getElementById('certificateDetailCredential2').innerHTML = selectedCertificate.credential === 'keyfile' ? (selectedCertificate.keyFileSize + ' bytes') : '';
+                document.getElementById('certificateDetailCredential3').innerHTML = selectedCertificate.credential === 'keyfile' ? selectedCertificate.keyFileName : '';
+            }
+
             // certificate add/edit dialog
 
             let selectedCertificate = {};
@@ -475,6 +586,11 @@
                 headerCollections.push({ id: '2', name: "sample collection 2", description: "a very simple collection for demonstration purposes", headers: [{ name: 'header-1', value: 'value-1' }, { name: 'header-2', value: 'value-2' }, { name: 'header-3', value: 'value-3' }] });
                 headerCollections.push({ id: '3', name: "sample collection 3", description: "a very simple collection for demonstration purposes", headers: [{ name: 'header-1', value: 'value-1' }, { name: 'header-2', value: 'value-2' }, { name: 'header-3', value: 'value-3' }] });
                 renderHeaderCollections();
+
+                certificates.push({ name: "sample certificate 1", description: "a very simple certificate for demonstration purposes" });
+                certificates.push({ name: "sample certificate 2", description: "a very simple certificate for demonstration purposes" });
+                certificates.push({ name: "sample certificate 3", description: "a very simple certificate for demonstration purposes" });
+                renderCertificates();
             } else {
                 Homey.get('headerCollections', (err, result) => {
                     if (err) return Homey.alert(err);
@@ -482,6 +598,14 @@
                         headerCollections = result;
                     }
                     renderHeaderCollections();
+                });
+
+                Homey.get('certificates', (err, result) => {
+                    if (err) return Homey.alert(err);
+                    if (result) {
+                        certificates = result;
+                    }
+                    renderCertificates();
                 })
             }
 
