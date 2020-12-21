@@ -136,16 +136,29 @@ class AdvancedRestClient extends Homey.App {
           }).write(args.body)
         });
 
-      })
-      .getArgument('headercollection')
+      });
+
+    performRequestAction.getArgument('headercollection')
       .registerAutocompleteListener((query, args) => {
         return new Promise((resolve) => {
           let headerCollections = Homey.ManagerSettings.get('headerCollections');
           if (headerCollections == undefined || headerCollections === null) {
             headerCollections = [];
           }
-          headerCollections.unshift({ name: 'Default', description: 'no customized headers' });
+          headerCollections.unshift({ name: 'None', description: 'no customized headers' });
           resolve(headerCollections);
+        });
+      });
+
+    performRequestAction.getArgument('certificate')
+      .registerAutocompleteListener((query, args) => {
+        return new Promise((resolve) => {
+          let certificates = Homey.ManagerSettings.get('certificates');
+          if (certificates == undefined || certificates === null) {
+            certificates = [];
+          }
+          certificates.unshift({ name: 'None', description: 'do not use a certificate' });
+          resolve(certificates);
         });
       });
 
@@ -241,26 +254,26 @@ class AdvancedRestClient extends Homey.App {
     let certificateForm = args.body;
 
     try {
-      util.saveFile('', certificateFolder, certificateForm.certificateFile, (error, success) => {
+      util.saveFile(certificateFolder, '', certificateForm.certificateFile, (error, success) => {
         if (error) {
           this.log('error persisting certificate', error);
           callback(error, null);
         } else {
-          this.log('persisted certificate', success.filename);
-          certificateForm.certificateFileName = success.fileName;
+          const certificateFileName = success.filename;
+          this.log('persisted certificate', certificateFileName);
           if (certificateForm.credential == 'keyfile') {
-            util.saveFile(success.filename + '.', certificateFolder, certificateForm.certificateKeyFile, (e, s) => {
+            util.saveFile(certificateFolder, success.filename + '.', certificateForm.keyFile, (e, s) => {
               if (e) {
                 this.log('error persisting key file', e);
                 callback(e, null);
               } else {
-                this.log('persisted key file', s.filename);
-                certificateForm.certificateKeyFileName = s.fileName;
-                persistCertificate(certificateForm, callback);
+                const keyFileName = s.filename;
+                this.log('persisted key file', keyFileName);
+                this.persistCertificate(certificateForm, certificateFileName, keyFileName, callback);
               }
             });
           } else {
-            persistCertificate(certificateForm, callback);
+            this.persistCertificate(certificateForm, certificateFileName, null, callback);
           }
         }
       });
@@ -270,12 +283,28 @@ class AdvancedRestClient extends Homey.App {
     }
   }
 
-  persistCertificate(certificateForm, callback) {
+  persistCertificate(certificateForm, certificateFileName, keyFileName, callback) {
+    const certificateFolder = '/userdata/';
     let certificates = Homey.ManagerSettings.get('certificates');
     if (certificates == undefined || certificates === null) {
       certificates = [];
     }
-    certificates.push({ name: certificateForm.name, description: certificateForm.description, credential: certificateForm.credential, password: certificateForm.password, certificateFileName: certificateForm.certificateFileName, keyFileName: certificateForm.keyFileName });
+
+    let certificate = {
+      name: certificateForm.name,
+      size: util.getFileSizeInBytes(certificateFolder + certificateFileName),
+      description: certificateForm.description,
+      credential: certificateForm.credential,
+      password: certificateForm.password,
+      certificateFileName: certificateFileName,
+      keyFileName: keyFileName
+    };
+
+    if (keyFileName != null) {
+      certificate.keyFileSize = util.getFileSizeInBytes(certificateFolder + keyFileName);
+    }
+
+    certificates.push(certificate);
     Homey.ManagerSettings.set('certificates', certificates);
 
     callback(null, 'success');

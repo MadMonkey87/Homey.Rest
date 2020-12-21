@@ -1,8 +1,8 @@
 <html>
 
 <head>
-    <!--<script type="text/javascript" src="/homey.js" data-origin="settings"></script>-->
-    <script src='https://cdn.staticaly.com/gh/robertklep/homey-mocks/v0.0.4/homey-settings-mock.js'></script>
+    <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+    <!--<script src='https://cdn.staticaly.com/gh/robertklep/homey-mocks/v0.0.4/homey-settings-mock.js'></script>-->
     <!--<script src="js/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>-->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -488,7 +488,7 @@
                 document.getElementById('certificateDetailHash').innerHTML = selectedCertificate.certificateFileName;
                 document.getElementById('certificateDetailCredential1').innerHTML = 'Mode: ' + selectedCertificate.credential === 'password' ? 'password' : 'key file';
                 document.getElementById('certificateDetailCredential2').innerHTML = selectedCertificate.credential === 'keyfile' ? (selectedCertificate.keyFileSize + ' bytes') : '';
-                document.getElementById('certificateDetailCredential3').innerHTML = selectedCertificate.credential === 'keyfile' ? selectedCertificate.keyFileName : '';
+                document.getElementById('certificateDetailCredential3').innerHTML = 'Hash (SHA256)' + selectedCertificate.credential === 'keyfile' ? selectedCertificate.keyFileName : '';
             }
 
             // certificate add/edit dialog
@@ -496,12 +496,13 @@
             let selectedCertificate = {};
 
             document.getElementById('newCertificateSaveButton').addEventListener('click', (e) => {
-                alert(JSON.stringify(this.selectedCertificate));
                 Homey.api('POST', '/certificate', this.selectedCertificate, function (err, result) {
                     if (err) {
-                        alert('error');
+                        Homey.alert('error');
+                        renderCertificates();
                     } else {
-                        alert('success');
+                        Homey.alert('success');
+                        renderCertificates();
                     }
                 })
             });

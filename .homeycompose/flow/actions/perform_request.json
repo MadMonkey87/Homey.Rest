@@ -115,7 +115,14 @@
             "type": "autocomplete",
             "name": "headercollection",
             "title": {
-                "en": "Header collection - if you need to use specific headers you should go to the app configuration and define a header collection there. After that you can choose the header collection here. Choose 'Default' if you do not need custom headers."
+                "en": "Header collection - if you need to use specific headers you should go to the app configuration and define a header collection there. After that you can choose the header collection here."
+            }
+        },
+        {
+            "type": "autocomplete",
+            "name": "certificate",
+            "title": {
+                "en": "Certificate2 - if you need to perform the request with a certificate (only for https) you can go to the app configuration -> certificate and upload it there. After that you can choose the certificate here."
             }
         }
     ]
