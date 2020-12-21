@@ -475,9 +475,18 @@
             }
 
             window.removeCertificate = function (e) {
-                certificates.splice(e, 1);
-                renderCertificates();
-                //persistCertificates();
+                Homey.api('DELETE', '/certificate?hash=' + certificates[e].certificateFileName, null, function (err, result) {
+                    if (err) {
+                        Homey.alert(err);
+                    }
+                    Homey.get('certificates', (err, result) => {
+                        if (err) return Homey.alert(err);
+                        if (result) {
+                            certificates = result;
+                        }
+                        renderCertificates();
+                    });
+                })
             }
 
             window.editCertificate = function (e) {
@@ -498,12 +507,15 @@
             document.getElementById('newCertificateSaveButton').addEventListener('click', (e) => {
                 Homey.api('POST', '/certificate', this.selectedCertificate, function (err, result) {
                     if (err) {
-                        Homey.alert('error');
-                        renderCertificates();
-                    } else {
-                        Homey.alert('success');
-                        renderCertificates();
+                        Homey.alert(err);
                     }
+                    Homey.get('certificates', (err, result) => {
+                        if (err) return Homey.alert(err);
+                        if (result) {
+                            certificates = result;
+                        }
+                        renderCertificates();
+                    });
                 })
             });
 

@@ -310,6 +310,39 @@ class AdvancedRestClient extends Homey.App {
     callback(null, 'success');
   }
 
+  removeCertificate(args, callback) {
+    this.log('remove certificate ', args.query.hash);
+    const certificateFolder = '/userdata/';
+    let certificates = Homey.ManagerSettings.get('certificates');
+    if (certificates == undefined || certificates === null) {
+      certificates = [];
+    }
+
+    for (var i = 0; i < certificates.length; i++) {
+      if (certificates[i].certificateFileName === args.query.hash) {
+
+        if (fs.existsSync(certificateFolder + certificates[i].certificateFileName)) {
+          this.log('removed file ', certificateFolder + certificates[i].certificateFileName);
+          fs.unlinkSync(certificateFolder + certificates[i].certificateFileName);
+        }
+
+        if (certificates[i].credential == 'keyfile' && fs.existsSync(certificateFolder + certificates[i].keyFileName)) {
+          this.log('removed file ', certificateFolder + certificates[i].keyFileName);
+          fs.unlinkSync(certificateFolder + certificates[i].keyFileName);
+        }
+
+        certificates.splice(i, 1);
+        Homey.ManagerSettings.set('certificates', certificates);
+
+        this.log('removed certificate ', args.query.hash);
+
+        callback(null, 'success');
+      }
+    }
+
+    callback('Certificate not found', null);
+  }
+
 }
 
 module.exports = AdvancedRestClient;
