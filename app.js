@@ -238,26 +238,49 @@ class AdvancedRestClient extends Homey.App {
   addCertificate(args, callback) {
     this.log('add certificate');
     const certificateFolder = '/userdata/';
+    let certificateForm = args.body;
 
-    this.log(certificateFolder + args.body.name);
-
-    util.saveFile(certificateFolder + args.body.name, args.body.certificateFile, () => {
-      this.log('Listing certificate files...');
-      fs.readdir(certificateFolder, (err, fileNames) => {
-        if (fileNames) {
-          fileNames.forEach(fileName => {
-            this.log(fileName + '(' + util.getFileSizeInBytes(certificateFolder + fileName) + ' bytes)');
-          });
+    try {
+      util.saveFile('', certificateFolder, certificateForm.certificateFile, (error, success) => {
+        if (error) {
+          this.log('error persisting certificate', error);
+          callback(error, null);
+        } else {
+          this.log('persisted certificate', success.filename);
+          certificateForm.certificateFileName = success.fileName;
+          if (certificateForm.credential == 'keyfile') {
+            util.saveFile(success.filename + '.', certificateFolder, certificateForm.certificateKeyFile, (e, s) => {
+              if (e) {
+                this.log('error persisting key file', e);
+                callback(e, null);
+              } else {
+                this.log('persisted key file', s.filename);
+                certificateForm.certificateKeyFileName = s.fileName;
+                persistCertificate(certificateForm, callback);
+              }
+            });
+          } else {
+            persistCertificate(certificateForm, callback);
+          }
         }
       });
-      this.log('...done!');
-
-      callback(null, 'success');
-    });
-
-
-
+    } catch (error) {
+      this.log('Error while adding certificate', error);
+      callback(error, null);
+    }
   }
+
+  persistCertificate(certificateForm, callback) {
+    let certificates = Homey.ManagerSettings.get('certificates');
+    if (certificates == undefined || certificates === null) {
+      certificates = [];
+    }
+    certificates.push({ name: certificateForm.name, description: certificateForm.description, credential: certificateForm.credential, password: certificateForm.password, certificateFileName: certificateForm.certificateFileName, keyFileName: certificateForm.keyFileName });
+    Homey.ManagerSettings.set('certificates', certificates);
+
+    callback(null, 'success');
+  }
+
 }
 
 module.exports = AdvancedRestClient;

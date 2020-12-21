@@ -396,7 +396,7 @@
             });
 
             document.getElementById('createCertificateModalButton').addEventListener('click', (e) => {
-                this.selectedCertificate = { name: '', description: '', credential: 'password', password: '', certificateFile: null, keyFile: null, keyFileName: null };
+                this.selectedCertificate = { name: '', description: '', credential: 'password', password: '', certificateFile: null, keyFile: null };
                 renderSelectedCertificate();
             });
 
@@ -441,7 +441,6 @@
             }
 
             function setCertificateKeyFileContent(filename, content) {
-                this.selectedCertificate.keyFileName = filename;
                 this.selectedCertificate.keyFile = content;
                 renderSelectedCertificate();
             }

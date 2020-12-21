@@ -1,4 +1,5 @@
 const fs = require('fs');
+const crypto = require('crypto');
 
 module.exports.util = {}
 
@@ -31,9 +32,14 @@ module.exports.util.convertBase64ToFile = function (base64EncodedContent) {
     return newBlob;
 }
 
-module.exports.util.saveFile = async function (filename, base64EncodedContent, callback) {
-    const type = base64EncodedContent.split(',')[0].split(';')[0].split(':')[1]; 
-    console.log(type);
-    const buffer = Buffer.from( base64EncodedContent.split(',')[1], 'base64');
-    fs.writeFile(filename, buffer, () => callback());
+module.exports.util.saveFile = function (path, prefix, base64EncodedContent, callback) {
+    // const type = base64EncodedContent.split(',')[0].split(';')[0].split(':')[1]; 
+    const buffer = Buffer.from(base64EncodedContent.split(',')[1], 'base64');
+    const sha256 = crypto.createHash("sha256").update(buffer).digest("hex");
+    const filename = path + prefix + sha256;
+    if (fs.existsSync(filename)) {
+        callback('the file exists already', null);
+    } else {
+        fs.writeFile(filename, buffer, () => callback(null, { filename: prefix + sha256 }));
+    }
 }
