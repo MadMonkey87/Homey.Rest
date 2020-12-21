@@ -10,14 +10,16 @@ const fs = require('fs');
 
 class AdvancedRestClient extends Homey.App {
   async onInit() {
-    const persistendFolder = '/userdata/';
+    const certificateFolder = '/userdata/';
     this.log('Advanced Rest Client has been initialized');
 
-    this.log('Listing files...');
-    fs.readdir(persistendFolder, (err, fileNames) => {
-      fileNames.forEach(fileName => {
-        this.log(fileName + '(' + util.getFileSizeInBytes(persistendFolder + fileName) + ' Bytes)');
-      });
+    this.log('Listing certificate files...');
+    fs.readdir(certificateFolder, (err, fileNames) => {
+      if (fileNames) {
+        fileNames.forEach(fileName => {
+          this.log(fileName + '(' + util.getFileSizeInBytes(certificateFolder + fileName) + ' bytes)');
+        });
+      }
     });
     this.log('...done!');
 
@@ -233,9 +235,28 @@ class AdvancedRestClient extends Homey.App {
 
   }
 
-  addCertificate (args){
-    this.log('add certificate')
-    this.log(args)
+  addCertificate(args, callback) {
+    this.log('add certificate');
+    const certificateFolder = '/userdata/';
+
+    this.log(certificateFolder + args.body.name);
+
+    util.saveFile(certificateFolder + args.body.name, args.body.certificateFile, () => {
+      this.log('Listing certificate files...');
+      fs.readdir(certificateFolder, (err, fileNames) => {
+        if (fileNames) {
+          fileNames.forEach(fileName => {
+            this.log(fileName + '(' + util.getFileSizeInBytes(certificateFolder + fileName) + ' bytes)');
+          });
+        }
+      });
+      this.log('...done!');
+
+      callback(null, 'success');
+    });
+
+
+
   }
 }
 
