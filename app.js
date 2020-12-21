@@ -88,6 +88,8 @@ class AdvancedRestClient extends Homey.App {
             break;
         }
 
+        headers['User-Agent'] = 'ARC';
+
         let headerCollections = Homey.ManagerSettings.get('headerCollections');
         if (headerCollections == undefined || headerCollections === null) {
           headerCollections = [];
