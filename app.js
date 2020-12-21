@@ -114,6 +114,20 @@ class AdvancedRestClient extends Homey.App {
           headers: headers
         };
 
+        if (args.certificate.certificateFileName != undefined) {
+          try {
+            const certificateFolder = '/userdata/';
+            options.cert = fs.readFileSync(certificateFolder + args.certificate.certificateFileName);
+            if (args.certificate.credential === 'keyfile') {
+              options.key = fs.readFileSync(certificateFolder + args.certificate.keyFileName);
+            } else {
+              options.key = args.certificate.password;
+            }
+          } catch (error) {
+            this.log('error while loading certificate ', error);
+          }
+        }
+
         this.log('options', options)
 
         return new Promise((resolve) => {
@@ -125,7 +139,9 @@ class AdvancedRestClient extends Homey.App {
             });
 
             resp.on('end', () => {
-              requestCompletedTrigger.trigger({ responde_code: resp.statusCode, body: data, headers: JSON.stringify(resp.headers), request_url: url });
+              const tokens = { responde_code: resp.statusCode, body: data, headers: JSON.stringify(resp.headers), request_url: args.url };
+              this.log('request completed ', tokens);
+              requestCompletedTrigger.trigger(tokens);
               resolve(true);
             });
 
