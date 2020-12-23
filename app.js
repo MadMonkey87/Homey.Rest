@@ -130,10 +130,16 @@ class AdvancedRestClient extends Homey.App {
           }
         }
 
-        this.log('options', options)
+        this.log('performing request', args.url, options)
 
         return new Promise((resolve) => {
           https.request(options, (resp) => {
+            /*try {
+            } catch (error) {
+              this.log("Error: ", err);
+              requestFailedTrigger.trigger({ error_message: err, error_code: '', request_url: args.url });
+              return resolve(false);
+            }*/
             let data = '';
 
             resp.on('data', (chunk) => {
@@ -148,10 +154,10 @@ class AdvancedRestClient extends Homey.App {
             });
 
           }).on('error', (err) => {
-            console.log("Error: " + JSON.stringify(err));
+            this.log("Error: " + JSON.stringify(err));
             requestFailedTrigger.trigger({ error_message: err.data.message, error_code: err.data.code, request_url: args.url });
             resolve(false);
-          }).write(args.body)
+          }).write(args.body);
         });
 
       });
