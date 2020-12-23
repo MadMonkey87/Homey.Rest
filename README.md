@@ -1,6 +1,6 @@
 # Advanced Rest Client (ARC) for Homey
 Advanced Rest Client (ARC) for [Athom Homey](https://homey.app/en-us/)
-[![current version](https://img.shields.io/badge/version-1.1.0-<COLOR>.svg)](https://shields.io/)
+[![current version](https://img.shields.io/badge/version-1.1.1-<COLOR>.svg)](https://shields.io/)
 
 # Introduction
 Provides some flow cards that allows you to perform some http(s) requests with advanced features. This can be used to access cloud services or local devices.

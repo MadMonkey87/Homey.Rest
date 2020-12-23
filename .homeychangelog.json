@@ -4,5 +4,8 @@
   },
   "1.1.0": {
     "en": " - Added some hints & descriptions\n - new flow cards to update header collections\n - Request completed action card now contains the request url too\n - New flow card for failed requests"
+  },
+  "1.1.1": {
+    "en": "updated store description"
   }
 }
