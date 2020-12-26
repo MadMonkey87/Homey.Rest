@@ -4,5 +4,8 @@
   },
   "1.1.0": {
     "en": " - Added some hints & descriptions\n - new flow cards to update header collections\n - Request completed action card now contains the request url too\n - New flow card for failed requests"
+  },
+  "2.0.0": {
+    "en": " - Added the option to use certificates for the requests\n - provided tags to easier identify the request in one of the 'request completed' flow cards"
   }
 }

@@ -147,7 +147,7 @@ class AdvancedRestClient extends Homey.App {
             });
 
             resp.on('end', () => {
-              const tokens = { responde_code: resp.statusCode, body: data, headers: JSON.stringify(resp.headers), request_url: args.url };
+              const tokens = { responde_code: resp.statusCode, body: data, headers: JSON.stringify(resp.headers), request_url: args.url, tags: args.tags };
               this.log('request completed ', tokens);
               requestCompletedTrigger.trigger(tokens);
               resolve(true);
@@ -155,7 +155,7 @@ class AdvancedRestClient extends Homey.App {
 
           }).on('error', (err) => {
             this.log("Error: " + JSON.stringify(err));
-            requestFailedTrigger.trigger({ error_message: err.data.message, error_code: err.data.code, request_url: args.url });
+            requestFailedTrigger.trigger({ error_message: err.data.message, error_code: err.data.code, request_url: args.url, tags: args.tags });
             resolve(false);
           }).write(args.body);
         });

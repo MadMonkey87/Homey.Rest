@@ -47,6 +47,49 @@
                     }
                 }
             ]
+        },
+        {
+            "type": "text",
+            "name": "tags",
+            "title": {
+                "en": "Tags - used to identify this request in the 'on request completed' flow card. Use multiple tags by separating them with an space and set the appropriate tag handling bellow."
+            },
+            "placeholder": {
+                "en": "tag1 tag2 tag3"
+            }
+        },
+        {
+            "type": "dropdown",
+            "name": "tagHandling",
+            "title": {
+                "en": "Tag Handling"
+            },
+            "values": [
+                {
+                    "id": "none",
+                    "label": {
+                        "en": "None - gets triggered for all requests"
+                    }
+                },
+                {
+                    "id": "containsAny",
+                    "label": {
+                        "en": "Contains Any - gets triggered if the request has at least one of the tags specified here"
+                    }
+                },
+                {
+                    "id": "containsAll",
+                    "label": {
+                        "en": "Contains All - gets triggered if the request has all of the tags specified here"
+                    }
+                },
+                {
+                    "id": "containsNot",
+                    "label": {
+                        "en": "Contains Not - gets triggered if the request does not contain any of the tags specified here"
+                    }
+                }
+            ]
         }
     ],
     "tokens": [
@@ -73,6 +116,16 @@
                 "en": "Request Url"
             },
             "example": "https://example:443/some/path?foo=bar"
+        },
+        {
+            "type": "text",
+            "name": "tags",
+            "title": {
+                "en": "Tags"
+            },
+            "placeholder": {
+                "example": "tag1 tag2 tag3"
+            }
         }
     ]
 }
