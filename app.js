@@ -127,19 +127,15 @@ class AdvancedRestClient extends Homey.App {
             }
           } catch (error) {
             this.log('error while loading certificate ', error);
+            requestFailedTrigger.trigger({ error_message: 'error while loading certificate: ' + error, error_code: '', request_url: args.url });
+            return;
           }
         }
 
-        this.log('performing request', args.url, options)
+        this.log('performing request', args.url, options);
 
         return new Promise((resolve) => {
           https.request(options, (resp) => {
-            /*try {
-            } catch (error) {
-              this.log("Error: ", err);
-              requestFailedTrigger.trigger({ error_message: err, error_code: '', request_url: args.url });
-              return resolve(false);
-            }*/
             let data = '';
 
             resp.on('data', (chunk) => {
@@ -147,7 +143,7 @@ class AdvancedRestClient extends Homey.App {
             });
 
             resp.on('end', () => {
-              const tokens = { responde_code: resp.statusCode, body: data, headers: JSON.stringify(resp.headers), request_url: args.url, tags: args.tags };
+              const tokens = { responde_code: resp.statusCode, body: data, headers: JSON.stringify(resp.headers), request_url: args.url };
               this.log('request completed ', tokens);
               requestCompletedTrigger.trigger(tokens);
               resolve(true);
@@ -155,7 +151,7 @@ class AdvancedRestClient extends Homey.App {
 
           }).on('error', (err) => {
             this.log("Error: " + JSON.stringify(err));
-            requestFailedTrigger.trigger({ error_message: err.data.message, error_code: err.data.code, request_url: args.url, tags: args.tags });
+            requestFailedTrigger.trigger({ error_message: err.data.message, error_code: err.data.code, request_url: args.url });
             resolve(false);
           }).write(args.body);
         });
