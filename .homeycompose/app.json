@@ -1,11 +1,11 @@
 {
   "id": "ch.philippewechsler.rest",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "compatibility": ">=4.0.0",
   "brandColor": "#ff4800",
   "sdk": 2,
   "name": {
-    "en": "Advanced Rest Client (ARC)"
+    "en": "Advanced Rest Client"
   },
   "description": {
     "en": "Perform http(s) requests with extended features such as custom headers, authorization & certificates"
