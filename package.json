@@ -4,5 +4,8 @@
   "main": "app.js",
   "devDependencies": {
     "homey": "^2.9.0"
+  },
+  "dependencies": {
+    "crypto": "^1.0.1"
   }
 }

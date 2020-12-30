@@ -5,6 +5,8 @@
     "hint": {
         "en": "Gets triggered when the 'Perform a request' flow card has completed it's request\nNote: this also gets triggered when the server responds with an error message."
     },
+    "args": [
+    ],
     "tokens": [
         {
             "name": "responde_code",

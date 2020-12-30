@@ -1,0 +1,1 @@
+Some self signed certificates for testing purposes, generated using https://www.selfsignedcertificate.com/ & https://certificatetools.com/
