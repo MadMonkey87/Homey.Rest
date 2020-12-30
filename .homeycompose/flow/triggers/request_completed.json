@@ -84,7 +84,7 @@
             "example": "https://example:443/some/path?foo=bar"
         },
         {
-            "type": "text",
+            "type": "string",
             "name": "tags",
             "title": {
                 "en": "Tags"
