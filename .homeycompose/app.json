@@ -8,7 +8,7 @@
     "en": "Advanced Rest Client (ARC)"
   },
   "description": {
-    "en": "Provides some flow cards that allows you to perform some restfull calls with advanced features such as certificate hanlding, authentication, custom headers and much more"
+    "en": "Perform http(s) requests with extended features such as custom headers, authorization & certificates"
   },
   "category": [
     "tools"
