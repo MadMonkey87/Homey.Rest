@@ -2,9 +2,6 @@
     "title": {
         "en": "Perform a request"
     },
-    "titleFormatted": {
-        "en": "[[verb]] [[url]] with body [[bodytype]]"
-    },
     "hint": {
         "en": "Performs a request with various options. Important: there is a separate trigger card available where you can handle the result of the request!"
     },
