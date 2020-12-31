@@ -35,5 +35,9 @@
       }
     }
   },
-  "homeyCommunityTopicId": 39662
+  "homeyCommunityTopicId": 39662,
+  "bugs": {
+    "url": "https://github.com/madmonkey87/Homey.Rest/issues/new?assignees=MadMonkey87&labels=bug&template=bug_report.md&title=Bug"
+  },
+  "source": "https://github.com/MadMonkey87/Homey.Rest"
 }
