@@ -151,7 +151,19 @@ class AdvancedRestClient extends Homey.App {
 
           }).on('error', (err) => {
             this.log("Error: " + JSON.stringify(err));
-            requestFailedTrigger.trigger({ error_message: err.data.message, error_code: err.data.code, request_url: args.url });
+
+            let token = {
+              error_message: '',
+              error_code: err.data.code,
+              request_url: args.url
+            };
+
+            if (err.data && err.data.message) {
+              token.error_message = err.data.message;
+            }
+
+            requestFailedTrigger.trigger(token);
+
             resolve(false);
           }).write(args.body);
         });

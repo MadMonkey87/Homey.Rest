@@ -3,7 +3,7 @@ Provides some flow cards that allows you to perform some http(s) requests with a
 
 Features
  - Use custom request headers
- - Perform requests with a custom certificate (coming soon)
+ - Perform requests with a custom certificate
  - Advanced response handling, i.e reading data from JSON/XML, response headers or server validation (coming soon)
  - Authorize the request (OAuth, JSON web token, bearer token, basic authentication) (coming soon)
 

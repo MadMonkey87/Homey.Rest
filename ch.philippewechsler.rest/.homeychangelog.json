@@ -10,5 +10,8 @@
   },
   "1.2.2": {
     "en": "Added the option to use certificates for the requests"
+  },
+  "1.2.3": {
+    "en": "Minor fixes & improvements"
   }
 }
