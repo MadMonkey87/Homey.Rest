@@ -24,9 +24,10 @@ class AdvancedRestClient extends Homey.App {
     this.log('...done!');
 
     let requestCompletedTrigger = new Homey.FlowCardTrigger('request_completed').register();
+
     let requestFailedTrigger = new Homey.FlowCardTrigger('request_failed')
       .registerRunListener((args, state) => {
-        return Promise.resolve(args.error === 'any' || args.error === state.error_code);
+        return Promise.resolve(args.error == 'any' || args.error === state.error_code);
       })
       .register();
 
@@ -147,6 +148,7 @@ class AdvancedRestClient extends Homey.App {
                 const tokens = { responde_code: resp.statusCode, body: data, headers: JSON.stringify(resp.headers), request_url: args.url };
                 this.log('request completed ', tokens);
                 requestCompletedTrigger.trigger(tokens);
+                requestFailedTrigger
                 resolve(true);
               });
 
@@ -176,7 +178,7 @@ class AdvancedRestClient extends Homey.App {
             this.log('unhandled error', error);
 
             let token = {
-              error_message: error,
+              error_message: 'internal error',
               error_code: -2,
               request_url: args.url
             };
