@@ -48,7 +48,7 @@ class AdvancedRestClient extends Homey.App {
             }
             break;
           case 'https':
-            adapter = http;
+            adapter = https;
             if (!port) {
               port = 443;
             }
@@ -116,7 +116,7 @@ class AdvancedRestClient extends Homey.App {
           headers: headers
         };
 
-        if (args.certificate.certificateFileName != undefined) {
+        if (args.certificate.certificateFileName != undefined && protocol == 'https') {
           try {
             const certificateFolder = '/userdata/';
             options.cert = fs.readFileSync(certificateFolder + args.certificate.certificateFileName);
@@ -135,37 +135,57 @@ class AdvancedRestClient extends Homey.App {
         this.log('performing request', args.url, options);
 
         return new Promise((resolve) => {
-          https.request(options, (resp) => {
-            let data = '';
+          try {
+            adapter.request(options, (resp) => {
+              let data = '';
 
-            resp.on('data', (chunk) => {
-              data += chunk;
-            });
+              resp.on('data', (chunk) => {
+                data += chunk;
+              });
 
-            resp.on('end', () => {
-              const tokens = { responde_code: resp.statusCode, body: data, headers: JSON.stringify(resp.headers), request_url: args.url };
-              this.log('request completed ', tokens);
-              requestCompletedTrigger.trigger(tokens);
-              resolve(true);
-            });
+              resp.on('end', () => {
+                const tokens = { responde_code: resp.statusCode, body: data, headers: JSON.stringify(resp.headers), request_url: args.url };
+                this.log('request completed ', tokens);
+                requestCompletedTrigger.trigger(tokens);
+                resolve(true);
+              });
 
-          }).on('error', (err) => {
-            this.log("Error: " + JSON.stringify(err));
+            }).on('error', (err) => {
+              this.log("Error: " + JSON.stringify(err));
+
+              let token = {
+                error_message: '',
+                error_code: -1,
+                request_url: args.url
+              };
+
+              if (err.data && err.data.message) {
+                token.error_message = err.data.message;
+              }
+
+              if (err.data && err.data.code) {
+                token.error_code = err.data.code;
+              }
+
+              requestFailedTrigger.trigger(token);
+
+              resolve(false);
+            }).write(args.body);
+
+          } catch (error) {
+            this.log('unhandled error', error);
 
             let token = {
-              error_message: '',
-              error_code: err.data.code,
+              error_message: error,
+              error_code: -2,
               request_url: args.url
             };
-
-            if (err.data && err.data.message) {
-              token.error_message = err.data.message;
-            }
 
             requestFailedTrigger.trigger(token);
 
             resolve(false);
-          }).write(args.body);
+          }
+
         });
 
       });
