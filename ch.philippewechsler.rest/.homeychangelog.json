@@ -13,5 +13,8 @@
   },
   "1.2.3": {
     "en": "Minor fixes & improvements"
+  },
+  "1.2.4": {
+    "en": "Improved iOS compatibility"
   }
 }
