@@ -2,9 +2,6 @@
     "title": {
         "en": "Remove a value from a Header Collection"
     },
-    "titleFormatted": {
-        "en": "Remove [[name]] from the collection [[headercollection]]"
-    },
     "hint": {
         "en": "Removes a header from a header collection"
     },

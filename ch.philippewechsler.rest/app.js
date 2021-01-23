@@ -23,17 +23,11 @@ class AdvancedRestClient extends Homey.App {
     });
     this.log('...done!');
 
-    let requestCompletedTrigger = new Homey.FlowCardTrigger('request_completed').register();
+    const requestCompletedTrigger = new Homey.FlowCardTrigger('request_completed').register();
 
-    let requestFailedTrigger = new Homey.FlowCardTrigger('request_failed')
-      .registerRunListener((args, state) => {
-        return Promise.resolve(args.error == 'any' || args.error === state.error_code);
-      })
-      .register();
+    const requestFailedTrigger = new Homey.FlowCardTrigger('request_failed').register();
 
-    let performRequestAction = new Homey.FlowCardAction('perform_request');
-    performRequestAction
-      .register()
+    const performRequestAction = new Homey.FlowCardAction('perform_request').register()
       .registerRunListener(async (args, state) => {
 
         let url = urlParser.parse(args.url);
@@ -135,7 +129,7 @@ class AdvancedRestClient extends Homey.App {
 
         this.log('performing request', args.url, options);
 
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
           try {
             adapter.request(options, (resp) => {
               let data = '';
@@ -148,8 +142,7 @@ class AdvancedRestClient extends Homey.App {
                 const tokens = { responde_code: resp.statusCode, body: data, headers: JSON.stringify(resp.headers), request_url: args.url };
                 this.log('request completed ', tokens);
                 requestCompletedTrigger.trigger(tokens);
-                requestFailedTrigger
-                resolve(true);
+                resolve();
               });
 
             }).on('error', (err) => {
@@ -157,7 +150,7 @@ class AdvancedRestClient extends Homey.App {
 
               let token = {
                 error_message: '',
-                error_code: -1,
+                error_code: '',
                 request_url: args.url
               };
 
@@ -170,26 +163,22 @@ class AdvancedRestClient extends Homey.App {
               }
 
               requestFailedTrigger.trigger(token);
-
-              resolve(false);
+              reject();
             }).write(args.body);
 
           } catch (error) {
             this.log('unhandled error', error);
 
-            let token = {
+            const token = {
               error_message: 'internal error',
-              error_code: -2,
+              error_code: '',
               request_url: args.url
             };
 
             requestFailedTrigger.trigger(token);
-
-            resolve(false);
+            reject();
           }
-
         });
-
       });
 
     performRequestAction.getArgument('headercollection')

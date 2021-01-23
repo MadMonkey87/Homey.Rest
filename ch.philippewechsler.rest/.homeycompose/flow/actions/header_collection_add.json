@@ -2,9 +2,6 @@
     "title": {
         "en": "Add/Update a value in Header Collection"
     },
-    "titleFormatted": {
-        "en": "Set [[name]] to [[value]] in the collection [[headercollection]]"
-    },
     "hint": {
         "en": "Adds or updates a header in a header collection"
     },

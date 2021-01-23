@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "ch.philippewechsler.rest",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "compatibility": ">=4.0.0",
   "brandColor": "#ff4800",
   "sdk": 2,
@@ -91,53 +91,10 @@
         "title": {
           "en": "Request failed"
         },
-        "titleFormatted": {
-          "en": "Request failed with [[error]] error"
-        },
         "hint": {
           "en": "Gets triggered when the 'Perform a request' flow card has failed.\nNote: this does not apply if the server responded with an error message."
         },
-        "args": [
-          {
-            "type": "dropdown",
-            "name": "error",
-            "title": {
-              "en": "Error"
-            },
-            "values": [
-              {
-                "id": "any",
-                "label": {
-                  "en": "Any"
-                }
-              },
-              {
-                "id": "ENOTFOUND",
-                "label": {
-                  "en": "Host not found"
-                }
-              },
-              {
-                "id": "ECONNRESET",
-                "label": {
-                  "en": "Connection reseted"
-                }
-              },
-              {
-                "id": "ECONNREFUSED",
-                "label": {
-                  "en": "Connection refused"
-                }
-              },
-              {
-                "id": "ETIMEDOUT",
-                "label": {
-                  "en": "Timeout"
-                }
-              }
-            ]
-          }
-        ],
+        "args": [],
         "tokens": [
           {
             "name": "error_message",
@@ -172,9 +129,6 @@
         "title": {
           "en": "Add/Update a value in Header Collection"
         },
-        "titleFormatted": {
-          "en": "Set [[name]] to [[value]] in the collection [[headercollection]]"
-        },
         "hint": {
           "en": "Adds or updates a header in a header collection"
         },
@@ -206,9 +160,6 @@
       {
         "title": {
           "en": "Remove a value from a Header Collection"
-        },
-        "titleFormatted": {
-          "en": "Remove [[name]] from the collection [[headercollection]]"
         },
         "hint": {
           "en": "Removes a header from a header collection"
