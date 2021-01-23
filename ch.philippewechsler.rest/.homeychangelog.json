@@ -11,10 +11,7 @@
   "1.2.2": {
     "en": "Added the option to use certificates for the requests"
   },
-  "1.2.3": {
-    "en": "Minor fixes & improvements"
-  },
   "1.2.4": {
-    "en": "Improved iOS compatibility"
+    "en": "Improved iOS compatibility, Minor fixes & improvements"
   }
 }
