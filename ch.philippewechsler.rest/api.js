@@ -1,32 +1,20 @@
-const Homey = require('homey')
-
-module.exports = [
-	{
-		method: 'POST',
-		path: '/certificate',
-		public: false,
-		fn: function (args, callback) {
-			Homey.app.addCertificate(args, (err, result) => {
-				if (err) {
-					callback(err, null)
-				} else {
-					callback(null, result)
-				}
-			})
-		}
+module.exports = {
+	async addCertificate({ homey, params, query, body }) {
+		homey.app.addCertificate(body, (err, result) => {
+			return {
+				success: err == null,
+				error: err,
+				result: result
+			};
+		})
 	},
-	{
-		method: 'DELETE',
-		path: '/certificate',
-		public: false,
-		fn: function (args, callback) {
-			Homey.app.removeCertificate(args, (err, result) => {
-				if (err) {
-					callback(err, null)
-				} else {
-					callback(null, result)
-				}
-			})
-		}
+	async removeCertificate({ homey, params, query, body }) {
+		homey.app.removeCertificate(query, (err, result) => {
+			return {
+				success: err == null,
+				error: err,
+				result: result
+			};
+		})
 	},
-]
+}

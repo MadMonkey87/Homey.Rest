@@ -5,6 +5,9 @@
     "hint": {
         "en": "Adds or updates a header in a header collection"
     },
+    "titleFormatted": {
+        "en": "Add/Update '[[name]]' to '[[value]]' for the header collection [[headercollection]]"
+    },
     "args": [
         {
             "type": "autocomplete",

@@ -1,10 +1,10 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "ch.philippewechsler.rest",
-  "version": "1.2.4",
-  "compatibility": ">=4.0.0",
+  "version": "1.3.1",
+  "compatibility": ">=5.0.0",
   "brandColor": "#ff4800",
-  "sdk": 2,
+  "sdk": 3,
   "name": {
     "en": "Advanced Rest Client"
   },
@@ -41,6 +41,18 @@
     "url": "https://github.com/madmonkey87/Homey.Rest/issues/new?assignees=MadMonkey87&labels=bug&template=bug_report.md&title=Bug"
   },
   "source": "https://github.com/MadMonkey87/Homey.Rest",
+  "api": {
+    "addCertificate": {
+      "method": "POST",
+      "path": "/certificate",
+      "public": false
+    },
+    "removeCertificate": {
+      "method": "DELETE",
+      "path": "/certificate",
+      "public": false
+    }
+  },
   "flow": {
     "triggers": [
       {
@@ -132,6 +144,9 @@
         "hint": {
           "en": "Adds or updates a header in a header collection"
         },
+        "titleFormatted": {
+          "en": "Add/Update '[[name]]' to '[[value]]' for the header collection [[headercollection]]"
+        },
         "args": [
           {
             "type": "autocomplete",
@@ -164,6 +179,9 @@
         "hint": {
           "en": "Removes a header from a header collection"
         },
+        "titleFormatted": {
+          "en": "Remove '[[name]]' from the header collection [[headercollection]]"
+        },
         "args": [
           {
             "type": "autocomplete",
@@ -188,6 +206,9 @@
         },
         "hint": {
           "en": "Performs a request with various options. Important: there is a separate trigger card available where you can handle the result of the request!"
+        },
+        "titleFormatted": {
+          "en": "[[verb]] to [[url]] with bodytype: [[bodytype]] [[body]], using [[headercollection]] & [[certificate]]"
         },
         "args": [
           {

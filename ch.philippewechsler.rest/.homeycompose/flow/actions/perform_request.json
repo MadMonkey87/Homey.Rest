@@ -5,6 +5,9 @@
     "hint": {
         "en": "Performs a request with various options. Important: there is a separate trigger card available where you can handle the result of the request!"
     },
+    "titleFormatted": {
+        "en": "[[verb]] to [[url]] with bodytype: [[bodytype]] [[body]], using [[headercollection]] & [[certificate]]"
+    },
     "args": [
         {
             "type": "text",

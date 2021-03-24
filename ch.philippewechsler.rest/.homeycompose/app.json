@@ -1,9 +1,9 @@
 {
   "id": "ch.philippewechsler.rest",
-  "version": "1.2.4",
-  "compatibility": ">=4.0.0",
+  "version": "1.3.1",
+  "compatibility": ">=5.0.0",
   "brandColor": "#ff4800",
-  "sdk": 2,
+  "sdk": 3,
   "name": {
     "en": "Advanced Rest Client"
   },
@@ -39,5 +39,17 @@
   "bugs": {
     "url": "https://github.com/madmonkey87/Homey.Rest/issues/new?assignees=MadMonkey87&labels=bug&template=bug_report.md&title=Bug"
   },
-  "source": "https://github.com/MadMonkey87/Homey.Rest"
+  "source": "https://github.com/MadMonkey87/Homey.Rest",
+  "api": {
+    "addCertificate": {
+      "method": "POST",
+      "path": "/certificate",
+      "public": false
+    },
+    "removeCertificate": {
+      "method": "DELETE",
+      "path": "/certificate",
+      "public": false
+    }
+  }
 }

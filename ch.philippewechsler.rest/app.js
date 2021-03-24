@@ -23,168 +23,168 @@ class AdvancedRestClient extends Homey.App {
     });
     this.log('...done!');
 
-    const requestCompletedTrigger = new Homey.FlowCardTrigger('request_completed').register();
+    const requestCompletedTrigger = this.homey.flow.getTriggerCard('request_completed');
 
-    const requestFailedTrigger = new Homey.FlowCardTrigger('request_failed').register();
+    const requestFailedTrigger = this.homey.flow.getTriggerCard('request_failed');
 
-    const performRequestAction = new Homey.FlowCardAction('perform_request').register()
-      .registerRunListener(async (args, state) => {
+    const performRequestAction = this.homey.flow.getActionCard('perform_request');
+    performRequestAction.registerRunListener(async (args, state) => {
 
-        let url = urlParser.parse(args.url);
-        let adapter = {};
-        let port = url.port;
+      let url = urlParser.parse(args.url);
+      let adapter = {};
+      let port = url.port;
 
-        const protocol = url.protocol.toLowerCase().replace('/', '').replace('.', '').replace(':', '')
-        switch (protocol) {
-          case 'http':
-            adapter = http;
-            if (!port) {
-              port = 80;
-            }
-            break;
-          case 'https':
-            adapter = https;
-            if (!port) {
-              port = 443;
-            }
-            break;
-          default:
-            this.log('invalid protocol', url.protocol);
-            Promise.resolve(false);
-            break;
-        }
-
-        let headers = {};
-
-        switch (args.bodytype) {
-          case 'json':
-            headers = {
-              'Content-Type': 'application/json',
-              'Content-Length': args.body.length
-            }
-            break;
-          case 'xml':
-            headers = {
-              'Content-Type': 'application/xml',
-              'Content-Length': args.body.length
-            }
-            break;
-          case 'text':
-            headers = {
-              'Content-Type': 'text/html',
-              'Content-Length': args.body.length
-            }
-            break;
-          case 'js':
-            headers = {
-              'Content-Type': 'application/javascript',
-              'Content-Length': args.body.length
-            }
-            break;
-        }
-
-        headers['User-Agent'] = 'ARC';
-
-        let headerCollections = Homey.ManagerSettings.get('headerCollections');
-        if (headerCollections == undefined || headerCollections === null) {
-          headerCollections = [];
-        }
-        let customHeaders = [];
-        for (var i = 0; i < headerCollections.length; i++) {
-          if (headerCollections[i].id == args.headercollection.id) {
-            customHeaders = headerCollections[i].headers;
+      const protocol = url.protocol.toLowerCase().replace('/', '').replace('.', '').replace(':', '')
+      switch (protocol) {
+        case 'http':
+          adapter = http;
+          if (!port) {
+            port = 80;
           }
-        }
-
-        for (var i = 0; i < customHeaders.length; i++) {
-          if (!util.hasOwnPropertyCaseInsensitive(headers, customHeaders[i].name)) {
-            headers[customHeaders[i].name] = customHeaders[i].value;
+          break;
+        case 'https':
+          adapter = https;
+          if (!port) {
+            port = 443;
           }
-        }
+          break;
+        default:
+          this.log('invalid protocol', url.protocol);
+          Promise.resolve(false);
+          break;
+      }
 
-        let options = {
-          host: url.host,
-          port: port,
-          path: url.path,
-          method: args.verb,
-          rejectUnauthorized: false,
-          headers: headers
-        };
+      let headers = {};
 
-        if (args.certificate.certificateFileName != undefined && protocol == 'https') {
-          try {
-            const certificateFolder = '/userdata/';
-            options.cert = fs.readFileSync(certificateFolder + args.certificate.certificateFileName);
-            if (args.certificate.credential === 'keyfile') {
-              options.key = fs.readFileSync(certificateFolder + args.certificate.keyFileName);
-            } else {
-              options.key = args.certificate.password;
-            }
-          } catch (error) {
-            this.log('error while loading certificate ', error);
-            requestFailedTrigger.trigger({ error_message: 'error while loading certificate: ' + error, error_code: '', request_url: args.url });
-            return;
+      switch (args.bodytype) {
+        case 'json':
+          headers = {
+            'Content-Type': 'application/json',
+            'Content-Length': args.body.length
           }
+          break;
+        case 'xml':
+          headers = {
+            'Content-Type': 'application/xml',
+            'Content-Length': args.body.length
+          }
+          break;
+        case 'text':
+          headers = {
+            'Content-Type': 'text/html',
+            'Content-Length': args.body.length
+          }
+          break;
+        case 'js':
+          headers = {
+            'Content-Type': 'application/javascript',
+            'Content-Length': args.body.length
+          }
+          break;
+      }
+
+      headers['User-Agent'] = 'ARC';
+
+      let headerCollections = this.homey.settings.get('headerCollections');
+      if (headerCollections == undefined || headerCollections === null) {
+        headerCollections = [];
+      }
+      let customHeaders = [];
+      for (var i = 0; i < headerCollections.length; i++) {
+        if (headerCollections[i].id == args.headercollection.id) {
+          customHeaders = headerCollections[i].headers;
         }
+      }
 
-        this.log('performing request', args.url, options);
+      for (var i = 0; i < customHeaders.length; i++) {
+        if (!util.hasOwnPropertyCaseInsensitive(headers, customHeaders[i].name)) {
+          headers[customHeaders[i].name] = customHeaders[i].value;
+        }
+      }
 
-        return new Promise((resolve, reject) => {
-          try {
-            adapter.request(options, (resp) => {
-              let data = '';
+      let options = {
+        host: url.host,
+        port: port,
+        path: url.path,
+        method: args.verb,
+        rejectUnauthorized: false,
+        headers: headers
+      };
 
-              resp.on('data', (chunk) => {
-                data += chunk;
-              });
+      if (args.certificate.certificateFileName != undefined && protocol == 'https') {
+        try {
+          const certificateFolder = '/userdata/';
+          options.cert = fs.readFileSync(certificateFolder + args.certificate.certificateFileName);
+          if (args.certificate.credential === 'keyfile') {
+            options.key = fs.readFileSync(certificateFolder + args.certificate.keyFileName);
+          } else {
+            options.key = args.certificate.password;
+          }
+        } catch (error) {
+          this.log('error while loading certificate ', error);
+          requestFailedTrigger.trigger({ error_message: 'error while loading certificate: ' + error, error_code: '', request_url: args.url });
+          return;
+        }
+      }
 
-              resp.on('end', () => {
-                const tokens = { responde_code: resp.statusCode, body: data, headers: JSON.stringify(resp.headers), request_url: args.url };
-                this.log('request completed ', tokens);
-                requestCompletedTrigger.trigger(tokens);
-                resolve();
-              });
+      this.log('performing request', args.url, options);
 
-            }).on('error', (err) => {
-              this.log("Error: " + JSON.stringify(err));
+      return new Promise((resolve, reject) => {
+        try {
+          adapter.request(options, (resp) => {
+            let data = '';
 
-              let token = {
-                error_message: '',
-                error_code: '',
-                request_url: args.url
-              };
+            resp.on('data', (chunk) => {
+              data += chunk;
+            });
 
-              if (err.data && err.data.message) {
-                token.error_message = err.data.message;
-              }
+            resp.on('end', () => {
+              const tokens = { responde_code: resp.statusCode, body: data, headers: JSON.stringify(resp.headers), request_url: args.url };
+              this.log('request completed ', tokens);
+              requestCompletedTrigger.trigger(tokens);
+              resolve();
+            });
 
-              if (err.data && err.data.code) {
-                token.error_code = err.data.code;
-              }
+          }).on('error', (err) => {
+            this.log("Error: " + JSON.stringify(err));
 
-              requestFailedTrigger.trigger(token);
-              reject();
-            }).write(args.body);
-
-          } catch (error) {
-            this.log('unhandled error', error);
-
-            const token = {
-              error_message: 'internal error',
+            let token = {
+              error_message: '',
               error_code: '',
               request_url: args.url
             };
 
+            if (err.data && err.data.message) {
+              token.error_message = err.data.message;
+            }
+
+            if (err.data && err.data.code) {
+              token.error_code = err.data.code;
+            }
+
             requestFailedTrigger.trigger(token);
             reject();
-          }
-        });
+          }).write(args.body);
+
+        } catch (error) {
+          this.log('unhandled error', error);
+
+          const token = {
+            error_message: 'internal error',
+            error_code: '',
+            request_url: args.url
+          };
+
+          requestFailedTrigger.trigger(token);
+          reject();
+        }
       });
+    });
 
     performRequestAction.getArgument('headercollection')
       .registerAutocompleteListener((query, args) => {
         return new Promise((resolve) => {
-          let headerCollections = Homey.ManagerSettings.get('headerCollections');
+          let headerCollections = this.homey.settings.get('headerCollections');
           if (headerCollections == undefined || headerCollections === null) {
             headerCollections = [];
           }
@@ -196,7 +196,7 @@ class AdvancedRestClient extends Homey.App {
     performRequestAction.getArgument('certificate')
       .registerAutocompleteListener((query, args) => {
         return new Promise((resolve) => {
-          let certificates = Homey.ManagerSettings.get('certificates');
+          let certificates = this.homey.settings.get('certificates');
           if (certificates == undefined || certificates === null) {
             certificates = [];
           }
@@ -205,12 +205,11 @@ class AdvancedRestClient extends Homey.App {
         });
       });
 
-    let updateHeaderCollectionAction = new Homey.FlowCardAction('header_collection_add');
+    let updateHeaderCollectionAction = this.homey.flow.getActionCard('header_collection_add');
     updateHeaderCollectionAction
-      .register()
       .registerRunListener(async (args, state) => {
         return new Promise((resolve) => {
-          let headerCollections = Homey.ManagerSettings.get('headerCollections');
+          let headerCollections = this.homey.settings.get('headerCollections');
           if (headerCollections == undefined || headerCollections === null) {
             headerCollections = [];
           }
@@ -232,7 +231,7 @@ class AdvancedRestClient extends Homey.App {
               break;
             }
           }
-          Homey.ManagerSettings.set('headerCollections', headerCollections);
+          this.homey.settings.set('headerCollections', headerCollections);
 
           resolve(true)
         });
@@ -240,7 +239,7 @@ class AdvancedRestClient extends Homey.App {
       .getArgument('headercollection')
       .registerAutocompleteListener((query, args) => {
         return new Promise((resolve) => {
-          let headerCollections = Homey.ManagerSettings.get('headerCollections');
+          let headerCollections = this.homey.settings.get('headerCollections');
           if (headerCollections == undefined || headerCollections === null) {
             headerCollections = [];
           }
@@ -248,12 +247,11 @@ class AdvancedRestClient extends Homey.App {
         });
       });
 
-    let removeHeaderCollectionItemAction = new Homey.FlowCardAction('header_collection_remove');
+    let removeHeaderCollectionItemAction = this.homey.flow.getActionCard('header_collection_remove');
     removeHeaderCollectionItemAction
-      .register()
       .registerRunListener(async (args, state) => {
         return new Promise((resolve) => {
-          let headerCollections = Homey.ManagerSettings.get('headerCollections');
+          let headerCollections = this.homey.settings.get('headerCollections');
           if (headerCollections == undefined || headerCollections === null) {
             headerCollections = [];
           }
@@ -273,7 +271,7 @@ class AdvancedRestClient extends Homey.App {
               break;
             }
           }
-          Homey.ManagerSettings.set('headerCollections', headerCollections);
+          this.homey.settings.set('headerCollections', headerCollections);
 
           resolve(true)
         });
@@ -281,7 +279,7 @@ class AdvancedRestClient extends Homey.App {
       .getArgument('headercollection')
       .registerAutocompleteListener((query, args) => {
         return new Promise((resolve) => {
-          let headerCollections = Homey.ManagerSettings.get('headerCollections');
+          let headerCollections = Homey.settings.get('headerCollections');
           if (headerCollections == undefined || headerCollections === null) {
             headerCollections = [];
           }
@@ -291,10 +289,10 @@ class AdvancedRestClient extends Homey.App {
 
   }
 
-  addCertificate(args, callback) {
+  addCertificate(body, callback) {
     this.log('add certificate');
     const certificateFolder = '/userdata/';
-    let certificateForm = args.body;
+    let certificateForm = body;
 
     try {
       util.saveFile(certificateFolder, '', certificateForm.certificateFile, (error, success) => {
@@ -328,7 +326,7 @@ class AdvancedRestClient extends Homey.App {
 
   persistCertificate(certificateForm, certificateFileName, keyFileName, callback) {
     const certificateFolder = '/userdata/';
-    let certificates = Homey.ManagerSettings.get('certificates');
+    let certificates = this.homey.settings.get('certificates');
     if (certificates == undefined || certificates === null) {
       certificates = [];
     }
@@ -348,21 +346,21 @@ class AdvancedRestClient extends Homey.App {
     }
 
     certificates.push(certificate);
-    Homey.ManagerSettings.set('certificates', certificates);
+    this.homey.settings.set('certificates', certificates);
 
     callback(null, 'success');
   }
 
-  removeCertificate(args, callback) {
-    this.log('remove certificate ', args.query.hash);
+  removeCertificate(query, callback) {
+    this.log('remove certificate ', query.hash);
     const certificateFolder = '/userdata/';
-    let certificates = Homey.ManagerSettings.get('certificates');
+    let certificates = this.homey.settings.get('certificates');
     if (certificates == undefined || certificates === null) {
       certificates = [];
     }
 
     for (var i = 0; i < certificates.length; i++) {
-      if (certificates[i].certificateFileName === args.query.hash) {
+      if (certificates[i].certificateFileName === query.hash) {
 
         if (fs.existsSync(certificateFolder + certificates[i].certificateFileName)) {
           this.log('removed file ', certificateFolder + certificates[i].certificateFileName);
@@ -375,9 +373,9 @@ class AdvancedRestClient extends Homey.App {
         }
 
         certificates.splice(i, 1);
-        Homey.ManagerSettings.set('certificates', certificates);
+        this.homey.settings.set('certificates', certificates);
 
-        this.log('removed certificate ', args.query.hash);
+        this.log('removed certificate ', query.hash);
 
         callback(null, 'success');
       }

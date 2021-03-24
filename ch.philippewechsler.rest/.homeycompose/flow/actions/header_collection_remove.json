@@ -5,6 +5,9 @@
     "hint": {
         "en": "Removes a header from a header collection"
     },
+    "titleFormatted": {
+        "en": "Remove '[[name]]' from the header collection [[headercollection]]"
+    },
     "args": [
         {
             "type": "autocomplete",
