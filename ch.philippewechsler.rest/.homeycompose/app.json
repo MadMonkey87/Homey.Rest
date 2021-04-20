@@ -2,7 +2,7 @@
   "id": "ch.philippewechsler.rest",
   "version": "1.3.2",
   "compatibility": ">=5.0.0",
-  "brandColor": "#ff4800",
+  "brandColor": "#baa48d",
   "sdk": 3,
   "name": {
     "en": "Advanced Rest Client"
