@@ -7,6 +7,7 @@ const https = require('https');
 const urlParser = require('url');
 const { util } = require('./util');
 const fs = require('fs');
+const { JSONPath } = require('jsonpath-plus');
 
 class AdvancedRestClient extends Homey.App {
   async onInit() {
@@ -26,6 +27,15 @@ class AdvancedRestClient extends Homey.App {
     const requestCompletedTrigger = this.homey.flow.getTriggerCard('request_completed');
 
     const requestFailedTrigger = this.homey.flow.getTriggerCard('request_failed');
+
+    let analyseJsonCondition = this.homey.flow.getConditionCard('analyse_json');
+    analyseJsonCondition
+      .registerRunListener((args, state) => {
+        return new Promise((resolve) => {
+          const result = JSONPath({ path: args.path, json: JSON.parse(args.json) });
+          resolve(JSON.stringify(result) === args.expected_result);
+        });
+      });
 
     const performRequestAction = this.homey.flow.getActionCard('perform_request');
     performRequestAction.registerRunListener(async (args, state) => {

@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "main": "app.js",
   "devDependencies": {
-    "homey": "^2.16.0"
+    "homey": "^2.19.2"
   },
   "dependencies": {
-    "crypto": "^1.0.1"
+    "crypto": "^1.0.1",
+    "jsonpath-plus": "^5.0.7"
   }
 }

@@ -1,6 +1,6 @@
 {
   "id": "ch.philippewechsler.rest",
-  "version": "1.3.2",
+  "version": "2.0.0",
   "compatibility": ">=5.0.0",
   "brandColor": "#baa48d",
   "sdk": 3,
