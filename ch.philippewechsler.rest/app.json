@@ -145,7 +145,7 @@
           "en": "Performs an JSONPath expression on a Json and check if it matches the expected result"
         },
         "titleFormatted": {
-          "en": "Check if [[path]] on [[json]] is [[expected_result]]"
+          "en": "Check if [[path]] on json [[json]] is [[expected_result]]"
         },
         "args": [
           {
@@ -165,7 +165,7 @@
               "en": "JSONPath expression"
             },
             "placeholder": {
-              "en": "foo"
+              "en": "$.foo"
             }
           },
           {
@@ -183,6 +183,53 @@
           }
         ],
         "id": "analyse_json"
+      },
+      {
+        "title": {
+          "en": "Analyse Html/Xml"
+        },
+        "hint": {
+          "en": "Performs an XPath expression on a Xml document and check if it matches the expected result"
+        },
+        "titleFormatted": {
+          "en": "Check if [[path]] on xml [[xml]] is [[expected_result]]"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "xml",
+            "title": {
+              "en": "Html/Xml"
+            },
+            "placeholder": {
+              "en": "<book>\n    <title>foo bar</title>\n</book>"
+            }
+          },
+          {
+            "type": "text",
+            "name": "path",
+            "title": {
+              "en": "XPath expression"
+            },
+            "placeholder": {
+              "en": "//title"
+            }
+          },
+          {
+            "type": "text",
+            "name": "expected_result",
+            "title": {
+              "en": "Expected result"
+            },
+            "hint": {
+              "en": "The result is always a array containing the matches of the XPath expression"
+            },
+            "placeholder": {
+              "en": "<title>foo bar</title>"
+            }
+          }
+        ],
+        "id": "analyse_xml"
       }
     ],
     "actions": [

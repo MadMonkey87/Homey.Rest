@@ -8,6 +8,8 @@ const urlParser = require('url');
 const { util } = require('./util');
 const fs = require('fs');
 const { JSONPath } = require('jsonpath-plus');
+const xpath = require('xpath');
+const dom = require('xmldom').DOMParser;
 
 class AdvancedRestClient extends Homey.App {
   async onInit() {
@@ -34,6 +36,16 @@ class AdvancedRestClient extends Homey.App {
         return new Promise((resolve) => {
           const result = JSONPath({ path: args.path, json: JSON.parse(args.json) });
           resolve(JSON.stringify(result) === args.expected_result);
+        });
+      });
+
+    let analyseXmlCondition = this.homey.flow.getConditionCard('analyse_xml');
+    analyseXmlCondition
+      .registerRunListener((args, state) => {
+        return new Promise((resolve) => {
+          const doc = new dom().parseFromString(args.xml);
+          const nodes = xpath.select(args.path, doc);
+          resolve(nodes.toString() === args.expected_result);
         });
       });
 

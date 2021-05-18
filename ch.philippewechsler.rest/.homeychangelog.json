@@ -21,6 +21,6 @@
     "en": "Updated packages"
   },
   "2.0.0": {
-    "en": "JSON path support"
+    "en": "JSONPath & XPath support"
   }
 }
