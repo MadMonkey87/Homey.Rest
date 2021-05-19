@@ -3,10 +3,10 @@
         "en": "Analyse Json"
     },
     "hint": {
-        "en": "Performs an JSONPath expression on a Json and check if it matches the expected result"
+        "en": "Applies a JSONPath expression on a Json and check if it matches the expected result"
     },
     "titleFormatted": {
-        "en": "Check if [[path]] on json [[json]] is [[expected_result]]"
+        "en": "Check if [[path]] on Json [[json]] is [[expected_result]]"
     },
     "args": [
         {

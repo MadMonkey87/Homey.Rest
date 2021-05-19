@@ -1,0 +1,33 @@
+{
+    "title": {
+        "en": "Apply XPath expression"
+    },
+    "hint": {
+        "en": "Applies a XPath expression on a Html/Xml. Important: there are separate trigger cards available where you can handle the result of the operation!"
+    },
+    "titleFormatted": {
+        "en": "Apply [[path]] on Html/Xml [[xml]]"
+    },
+    "args": [
+        {
+            "type": "text",
+            "name": "xml",
+            "title": {
+                "en": "Html/Xml"
+            },
+            "placeholder": {
+                "en": "<book>\n    <title>foo bar</title>\n</book>"
+            }
+        },
+        {
+            "type": "text",
+            "name": "path",
+            "title": {
+                "en": "XPath expression"
+            },
+            "placeholder": {
+                "en": "//title"
+            }
+        }
+    ]
+}

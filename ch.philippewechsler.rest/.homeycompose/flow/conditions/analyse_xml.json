@@ -3,10 +3,10 @@
         "en": "Analyse Html/Xml"
     },
     "hint": {
-        "en": "Performs an XPath expression on a Xml document and check if it matches the expected result"
+        "en": "Applies a XPath expression on a Html/Xml document and check if it matches the expected result"
     },
     "titleFormatted": {
-        "en": "Check if [[path]] on xml [[xml]] is [[expected_result]]"
+        "en": "Check if [[path]] on Html/Xml [[xml]] is [[expected_result]]"
     },
     "args": [
         {

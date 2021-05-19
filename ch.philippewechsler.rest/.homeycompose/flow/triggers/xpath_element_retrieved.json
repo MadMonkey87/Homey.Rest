@@ -1,0 +1,35 @@
+{
+    "title": {
+        "en": "A XPath operation found an element"
+    },
+    "hint": {
+        "en": "Gets triggered when the 'Apply XPath expression' flow card matched an element."
+    },
+    "args": [],
+    "tokens": [
+        {
+            "name": "element",
+            "type": "text",
+            "title": {
+                "en": "The matched element"
+            },
+            "example": "<title>foo bar</title>"
+        },
+        {
+            "name": "count",
+            "type": "number",
+            "title": {
+                "en": "The total amount of found matches"
+            },
+            "example": 1
+        },
+        {
+            "name": "index",
+            "type": "number",
+            "title": {
+                "en": "The index of the current match"
+            },
+            "example": 1
+        }
+    ]
+}
