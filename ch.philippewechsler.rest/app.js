@@ -83,6 +83,33 @@ class AdvancedRestClient extends Homey.App {
       });
     });
 
+    const executeXPathAction = this.homey.flow.getActionCard('execute_xpath_path');
+    executeXPathAction.registerRunListener(async (args, state) => {
+      return new Promise((resolve) => {
+        const doc = new dom().parseFromString(args.xml);
+        const nodes = xpath.select(args.path, doc);
+
+        if (nodes) {
+          for (let i = 0; i < nodes.length; i++) {
+            const token = {
+              element: nodes[i].toString(),
+              index: i,
+              count: nodes.length
+            };
+            xpathElementRetrievedTrigger.trigger(token);
+          }
+        }
+
+        const token = {
+          result: nodes.toString(),
+          count: nodes.length
+        };
+        xpathOperationCompletedTrigger.trigger(token);
+
+        resolve();
+      });
+    });
+
     const performRequestAction = this.homey.flow.getActionCard('perform_request');
     performRequestAction.registerRunListener(async (args, state) => {
 
