@@ -271,10 +271,13 @@ class AdvancedRestClient extends Homey.App {
           if (headerCollections == undefined || headerCollections === null) {
             headerCollections = [];
           }
+          headerCollections = headerCollections.sort((i, j) => ('' + i.name).localeCompare(j.name));
           let result = [];
           result.push({ name: 'None', description: 'no customized headers' });
           headerCollections.forEach(headerCollection => {
-            result.push({ name: headerCollection.name, description: headerCollection.description, id: headerCollection.id });
+            if (!query || headerCollection.name.toLowerCase().includes(query.toLowerCase()) || headerCollection.description.toLowerCase().includes(query.toLowerCase())) {
+              result.push({ name: headerCollection.name, description: headerCollection.description, id: headerCollection.id });
+            }
           });
           resolve(result);
         });
@@ -287,10 +290,13 @@ class AdvancedRestClient extends Homey.App {
           if (certificates == undefined || certificates === null) {
             certificates = [];
           }
+          certificates = certificates.sort((i, j) => ('' + i.name).localeCompare(j.name));
           let result = [];
           result.push({ name: 'None', description: 'do not use a certificate' });
           certificates.forEach(certificate => {
-            result.push({ name: certificate.name, description: certificate.description, id: certificate.id });
+            if (!query || certificate.name.toLowerCase().includes(query.toLowerCase()) || certificate.description.toLowerCase().includes(query.toLowerCase())) {
+              result.push({ name: certificate.name, description: certificate.description, id: certificate.id });
+            }
           });
           resolve(result);
         });
