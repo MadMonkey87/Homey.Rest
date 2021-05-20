@@ -271,8 +271,12 @@ class AdvancedRestClient extends Homey.App {
           if (headerCollections == undefined || headerCollections === null) {
             headerCollections = [];
           }
-          headerCollections.unshift({ name: 'None', description: 'no customized headers' });
-          resolve(headerCollections);
+          let result = [];
+          result.push({ name: 'None', description: 'no customized headers' });
+          headerCollections.forEach(headerCollection => {
+            result.push({ name: headerCollection.name, description: headerCollection.description, id: headerCollection.id });
+          });
+          resolve(result);
         });
       });
 
@@ -283,8 +287,12 @@ class AdvancedRestClient extends Homey.App {
           if (certificates == undefined || certificates === null) {
             certificates = [];
           }
-          certificates.unshift({ name: 'None', description: 'do not use a certificate' });
-          resolve(certificates);
+          let result = [];
+          result.push({ name: 'None', description: 'do not use a certificate' });
+          certificates.forEach(certificate => {
+            result.push({ name: certificate.name, description: certificate.description, id: certificate.id });
+          });
+          resolve(result);
         });
       });
 
