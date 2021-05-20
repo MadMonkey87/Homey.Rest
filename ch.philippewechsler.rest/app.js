@@ -30,6 +30,14 @@ class AdvancedRestClient extends Homey.App {
 
     const requestFailedTrigger = this.homey.flow.getTriggerCard('request_failed');
 
+    const jsonPathElementRetrievedTrigger = this.homey.flow.getTriggerCard('json_path_element_retrieved');
+
+    const jsonPathOperationCompletedTrigger = this.homey.flow.getTriggerCard('json_path_operation_completed');
+
+    const xpathElementRetrievedTrigger = this.homey.flow.getTriggerCard('xpath_element_retrieved');
+
+    const xpathOperationCompletedTrigger = this.homey.flow.getTriggerCard('xpath_operation_completed');
+
     let analyseJsonCondition = this.homey.flow.getConditionCard('analyse_json');
     analyseJsonCondition
       .registerRunListener((args, state) => {
@@ -48,6 +56,32 @@ class AdvancedRestClient extends Homey.App {
           resolve(nodes.toString() === args.expected_result);
         });
       });
+
+    const executeJsonPathAction = this.homey.flow.getActionCard('execute_json_path');
+    executeJsonPathAction.registerRunListener(async (args, state) => {
+      return new Promise((resolve) => {
+        const result = JSONPath({ path: args.path, json: JSON.parse(args.json) });
+
+        if (result) {
+          for (let i = 0; i < result.length; i++) {
+            const token = {
+              element: result[i],
+              index: i,
+              count: result.length
+            };
+            jsonPathElementRetrievedTrigger.trigger(token);
+          }
+        }
+
+        const token = {
+          result: JSON.stringify(result),
+          count: result.length
+        };
+        jsonPathOperationCompletedTrigger.trigger(token);
+
+        resolve();
+      });
+    });
 
     const performRequestAction = this.homey.flow.getActionCard('perform_request');
     performRequestAction.registerRunListener(async (args, state) => {
@@ -105,7 +139,7 @@ class AdvancedRestClient extends Homey.App {
           break;
       }
 
-      headers['User-Agent'] = 'ARC';
+      headers['User-Agent'] = 'ARC for Homey';
 
       let headerCollections = this.homey.settings.get('headerCollections');
       if (headerCollections == undefined || headerCollections === null) {
