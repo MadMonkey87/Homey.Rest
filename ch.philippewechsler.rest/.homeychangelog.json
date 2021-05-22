@@ -21,6 +21,6 @@
     "en": "Updated packages"
   },
   "2.0.0": {
-    "en": "JSONPath & XPath support, improved auto complete"
+    "en": "JSONPath & XPath support, improved auto complete, body is no longer required"
   }
 }
