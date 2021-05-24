@@ -9,7 +9,7 @@
     "tokens": [
         {
             "name": "element",
-            "type": "text",
+            "type": "string",
             "title": {
                 "en": "The matched element"
             },

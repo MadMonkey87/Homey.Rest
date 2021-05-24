@@ -83,7 +83,7 @@ class AdvancedRestClient extends Homey.App {
       });
     });
 
-    const executeXPathAction = this.homey.flow.getActionCard('execute_xpath_path');
+    const executeXPathAction = this.homey.flow.getActionCard('execute_xpath');
     executeXPathAction.registerRunListener(async (args, state) => {
       return new Promise((resolve) => {
         const doc = new dom().parseFromString(args.xml);

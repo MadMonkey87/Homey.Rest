@@ -9,7 +9,7 @@
     "tokens": [
         {
             "name": "result",
-            "type": "text",
+            "type": "string",
             "title": {
                 "en": "An json array containing all the found matches"
             },
