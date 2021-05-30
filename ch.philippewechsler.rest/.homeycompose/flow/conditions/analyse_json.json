@@ -1,0 +1,46 @@
+{
+    "title": {
+        "en": "Analyse Json"
+    },
+    "hint": {
+        "en": "Applies a JSONPath expression on a Json and check if it matches the expected result"
+    },
+    "titleFormatted": {
+        "en": "Check if [[path]] on Json [[json]] is [[expected_result]]"
+    },
+    "args": [
+        {
+            "type": "text",
+            "name": "json",
+            "title": {
+                "en": "Json"
+            },
+            "placeholder": {
+                "en": "{\n    \"foo\" : \"bar\"\n}"
+            }
+        },
+        {
+            "type": "text",
+            "name": "path",
+            "title": {
+                "en": "JSONPath expression"
+            },
+            "placeholder": {
+                "en": "$.foo"
+            }
+        },
+        {
+            "type": "text",
+            "name": "expected_result",
+            "title": {
+                "en": "Expected result"
+            },
+            "hint":{
+                "en": "The result is always a array containing the matches of the JSONPath expression"
+            },
+            "placeholder": {
+                "en": "[\"bar\"]"
+            }
+        }
+    ]
+}

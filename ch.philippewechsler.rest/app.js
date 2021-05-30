@@ -7,6 +7,9 @@ const https = require('https');
 const urlParser = require('url');
 const { util } = require('./util');
 const fs = require('fs');
+const { JSONPath } = require('jsonpath-plus');
+const xpath = require('xpath');
+const dom = require('xmldom').DOMParser;
 
 class AdvancedRestClient extends Homey.App {
   async onInit() {
@@ -26,6 +29,86 @@ class AdvancedRestClient extends Homey.App {
     const requestCompletedTrigger = this.homey.flow.getTriggerCard('request_completed');
 
     const requestFailedTrigger = this.homey.flow.getTriggerCard('request_failed');
+
+    const jsonPathElementRetrievedTrigger = this.homey.flow.getTriggerCard('json_path_element_retrieved');
+
+    const jsonPathOperationCompletedTrigger = this.homey.flow.getTriggerCard('json_path_operation_completed');
+
+    const xpathElementRetrievedTrigger = this.homey.flow.getTriggerCard('xpath_element_retrieved');
+
+    const xpathOperationCompletedTrigger = this.homey.flow.getTriggerCard('xpath_operation_completed');
+
+    let analyseJsonCondition = this.homey.flow.getConditionCard('analyse_json');
+    analyseJsonCondition
+      .registerRunListener((args, state) => {
+        return new Promise((resolve) => {
+          const result = JSONPath({ path: args.path, json: JSON.parse(args.json) });
+          resolve(JSON.stringify(result) === args.expected_result);
+        });
+      });
+
+    let analyseXmlCondition = this.homey.flow.getConditionCard('analyse_xml');
+    analyseXmlCondition
+      .registerRunListener((args, state) => {
+        return new Promise((resolve) => {
+          const doc = new dom().parseFromString(args.xml);
+          const nodes = xpath.select(args.path, doc);
+          resolve(nodes.toString() === args.expected_result);
+        });
+      });
+
+    const executeJsonPathAction = this.homey.flow.getActionCard('execute_json_path');
+    executeJsonPathAction.registerRunListener(async (args, state) => {
+      return new Promise((resolve) => {
+        const result = JSONPath({ path: args.path, json: JSON.parse(args.json) });
+
+        if (result) {
+          for (let i = 0; i < result.length; i++) {
+            const token = {
+              element: result[i],
+              index: i,
+              count: result.length
+            };
+            jsonPathElementRetrievedTrigger.trigger(token);
+          }
+        }
+
+        const token = {
+          result: JSON.stringify(result),
+          count: result.length
+        };
+        jsonPathOperationCompletedTrigger.trigger(token);
+
+        resolve();
+      });
+    });
+
+    const executeXPathAction = this.homey.flow.getActionCard('execute_xpath');
+    executeXPathAction.registerRunListener(async (args, state) => {
+      return new Promise((resolve) => {
+        const doc = new dom().parseFromString(args.xml);
+        const nodes = xpath.select(args.path, doc);
+
+        if (nodes) {
+          for (let i = 0; i < nodes.length; i++) {
+            const token = {
+              element: nodes[i].toString(),
+              index: i,
+              count: nodes.length
+            };
+            xpathElementRetrievedTrigger.trigger(token);
+          }
+        }
+
+        const token = {
+          result: nodes.toString(),
+          count: nodes.length
+        };
+        xpathOperationCompletedTrigger.trigger(token);
+
+        resolve();
+      });
+    });
 
     const performRequestAction = this.homey.flow.getActionCard('perform_request');
     performRequestAction.registerRunListener(async (args, state) => {
@@ -83,7 +166,7 @@ class AdvancedRestClient extends Homey.App {
           break;
       }
 
-      headers['User-Agent'] = 'ARC';
+      headers['User-Agent'] = 'ARC for Homey';
 
       let headerCollections = this.homey.settings.get('headerCollections');
       if (headerCollections == undefined || headerCollections === null) {
@@ -188,8 +271,15 @@ class AdvancedRestClient extends Homey.App {
           if (headerCollections == undefined || headerCollections === null) {
             headerCollections = [];
           }
-          headerCollections.unshift({ name: 'None', description: 'no customized headers' });
-          resolve(headerCollections);
+          headerCollections = headerCollections.sort((i, j) => ('' + i.name).localeCompare(j.name));
+          let result = [];
+          result.push({ name: 'None', description: 'no customized headers' });
+          headerCollections.forEach(headerCollection => {
+            if (!query || headerCollection.name.toLowerCase().includes(query.toLowerCase()) || headerCollection.description.toLowerCase().includes(query.toLowerCase())) {
+              result.push({ name: headerCollection.name, description: headerCollection.description, id: headerCollection.id });
+            }
+          });
+          resolve(result);
         });
       });
 
@@ -200,8 +290,15 @@ class AdvancedRestClient extends Homey.App {
           if (certificates == undefined || certificates === null) {
             certificates = [];
           }
-          certificates.unshift({ name: 'None', description: 'do not use a certificate' });
-          resolve(certificates);
+          certificates = certificates.sort((i, j) => ('' + i.name).localeCompare(j.name));
+          let result = [];
+          result.push({ name: 'None', description: 'do not use a certificate' });
+          certificates.forEach(certificate => {
+            if (!query || certificate.name.toLowerCase().includes(query.toLowerCase()) || certificate.description.toLowerCase().includes(query.toLowerCase())) {
+              result.push({ name: certificate.name, description: certificate.description, id: certificate.id });
+            }
+          });
+          resolve(result);
         });
       });
 

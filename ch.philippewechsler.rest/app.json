@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "ch.philippewechsler.rest",
-  "version": "1.3.2",
+  "version": "2.0.0",
   "compatibility": ">=5.0.0",
   "brandColor": "#baa48d",
   "sdk": 3,
@@ -55,6 +55,70 @@
   },
   "flow": {
     "triggers": [
+      {
+        "title": {
+          "en": "A JSONPath operation found an element"
+        },
+        "hint": {
+          "en": "Gets triggered when the 'Apply JSONPath expression' flow card matched an element."
+        },
+        "args": [],
+        "tokens": [
+          {
+            "name": "element",
+            "type": "string",
+            "title": {
+              "en": "The matched element"
+            },
+            "example": "\"bar\""
+          },
+          {
+            "name": "count",
+            "type": "number",
+            "title": {
+              "en": "The total amount of found matches"
+            },
+            "example": 1
+          },
+          {
+            "name": "index",
+            "type": "number",
+            "title": {
+              "en": "The index of the current match"
+            },
+            "example": 1
+          }
+        ],
+        "id": "json_path_element_retrieved"
+      },
+      {
+        "title": {
+          "en": "JSONPath operation completed"
+        },
+        "hint": {
+          "en": "Gets triggered when the 'Apply JSONPath expression' flow card has completed it's operation."
+        },
+        "args": [],
+        "tokens": [
+          {
+            "name": "result",
+            "type": "string",
+            "title": {
+              "en": "An json array containing all the found matches"
+            },
+            "example": "[\"bar\"]"
+          },
+          {
+            "name": "count",
+            "type": "number",
+            "title": {
+              "en": "The total amount of found matches"
+            },
+            "example": 1
+          }
+        ],
+        "id": "json_path_operation_completed"
+      },
       {
         "title": {
           "en": "Request completed"
@@ -134,9 +198,237 @@
           }
         ],
         "id": "request_failed"
+      },
+      {
+        "title": {
+          "en": "A XPath operation found an element"
+        },
+        "hint": {
+          "en": "Gets triggered when the 'Apply XPath expression' flow card matched an element."
+        },
+        "args": [],
+        "tokens": [
+          {
+            "name": "element",
+            "type": "string",
+            "title": {
+              "en": "The matched element"
+            },
+            "example": "<title>foo bar</title>"
+          },
+          {
+            "name": "count",
+            "type": "number",
+            "title": {
+              "en": "The total amount of found matches"
+            },
+            "example": 1
+          },
+          {
+            "name": "index",
+            "type": "number",
+            "title": {
+              "en": "The index of the current match"
+            },
+            "example": 1
+          }
+        ],
+        "id": "xpath_element_retrieved"
+      },
+      {
+        "title": {
+          "en": "XPath operation completed"
+        },
+        "hint": {
+          "en": "Gets triggered when the 'Apply XPath expression' flow card has completed it's operation."
+        },
+        "args": [],
+        "tokens": [
+          {
+            "name": "result",
+            "type": "string",
+            "title": {
+              "en": "An json array containing all the found matches"
+            },
+            "example": "[\"bar\"]"
+          },
+          {
+            "name": "count",
+            "type": "number",
+            "title": {
+              "en": "The total amount of found matches"
+            },
+            "example": 1
+          }
+        ],
+        "id": "xpath_operation_completed"
+      }
+    ],
+    "conditions": [
+      {
+        "title": {
+          "en": "Analyse Json"
+        },
+        "hint": {
+          "en": "Applies a JSONPath expression on a Json and check if it matches the expected result"
+        },
+        "titleFormatted": {
+          "en": "Check if [[path]] on Json [[json]] is [[expected_result]]"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "json",
+            "title": {
+              "en": "Json"
+            },
+            "placeholder": {
+              "en": "{\n    \"foo\" : \"bar\"\n}"
+            }
+          },
+          {
+            "type": "text",
+            "name": "path",
+            "title": {
+              "en": "JSONPath expression"
+            },
+            "placeholder": {
+              "en": "$.foo"
+            }
+          },
+          {
+            "type": "text",
+            "name": "expected_result",
+            "title": {
+              "en": "Expected result"
+            },
+            "hint": {
+              "en": "The result is always a array containing the matches of the JSONPath expression"
+            },
+            "placeholder": {
+              "en": "[\"bar\"]"
+            }
+          }
+        ],
+        "id": "analyse_json"
+      },
+      {
+        "title": {
+          "en": "Analyse Html/Xml"
+        },
+        "hint": {
+          "en": "Applies a XPath expression on a Html/Xml document and check if it matches the expected result"
+        },
+        "titleFormatted": {
+          "en": "Check if [[path]] on Html/Xml [[xml]] is [[expected_result]]"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "xml",
+            "title": {
+              "en": "Html/Xml"
+            },
+            "placeholder": {
+              "en": "<book>\n    <title>foo bar</title>\n</book>"
+            }
+          },
+          {
+            "type": "text",
+            "name": "path",
+            "title": {
+              "en": "XPath expression"
+            },
+            "placeholder": {
+              "en": "//title"
+            }
+          },
+          {
+            "type": "text",
+            "name": "expected_result",
+            "title": {
+              "en": "Expected result"
+            },
+            "hint": {
+              "en": "The result is always a array containing the matches of the XPath expression"
+            },
+            "placeholder": {
+              "en": "<title>foo bar</title>"
+            }
+          }
+        ],
+        "id": "analyse_xml"
       }
     ],
     "actions": [
+      {
+        "title": {
+          "en": "Apply JSONPath expression"
+        },
+        "hint": {
+          "en": "Applies a JSONPath expression on a Json. Important: there are separate trigger cards available where you can handle the result of the operation!"
+        },
+        "titleFormatted": {
+          "en": "Apply [[path]] on Json [[json]]"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "json",
+            "title": {
+              "en": "Json"
+            },
+            "placeholder": {
+              "en": "{\n    \"foo\" : \"bar\"\n}"
+            }
+          },
+          {
+            "type": "text",
+            "name": "path",
+            "title": {
+              "en": "JSONPath expression"
+            },
+            "placeholder": {
+              "en": "$.foo"
+            }
+          }
+        ],
+        "id": "execute_json_path"
+      },
+      {
+        "title": {
+          "en": "Apply XPath expression"
+        },
+        "hint": {
+          "en": "Applies a XPath expression on a Html/Xml. Important: there are separate trigger cards available where you can handle the result of the operation!"
+        },
+        "titleFormatted": {
+          "en": "Apply [[path]] on Html/Xml [[xml]]"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "xml",
+            "title": {
+              "en": "Html/Xml"
+            },
+            "placeholder": {
+              "en": "<book>\n    <title>foo bar</title>\n</book>"
+            }
+          },
+          {
+            "type": "text",
+            "name": "path",
+            "title": {
+              "en": "XPath expression"
+            },
+            "placeholder": {
+              "en": "//title"
+            }
+          }
+        ],
+        "id": "execute_xpath"
+      },
       {
         "title": {
           "en": "Add/Update a value in Header Collection"
@@ -311,7 +603,8 @@
             },
             "placeholder": {
               "en": "{\n    \"foo\" : \"bar\"\n}"
-            }
+            },
+            "required": false
           },
           {
             "type": "autocomplete",

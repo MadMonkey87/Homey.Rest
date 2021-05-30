@@ -1,0 +1,46 @@
+{
+    "title": {
+        "en": "Analyse Html/Xml"
+    },
+    "hint": {
+        "en": "Applies a XPath expression on a Html/Xml document and check if it matches the expected result"
+    },
+    "titleFormatted": {
+        "en": "Check if [[path]] on Html/Xml [[xml]] is [[expected_result]]"
+    },
+    "args": [
+        {
+            "type": "text",
+            "name": "xml",
+            "title": {
+                "en": "Html/Xml"
+            },
+            "placeholder": {
+                "en": "<book>\n    <title>foo bar</title>\n</book>"
+            }
+        },
+        {
+            "type": "text",
+            "name": "path",
+            "title": {
+                "en": "XPath expression"
+            },
+            "placeholder": {
+                "en": "//title"
+            }
+        },
+        {
+            "type": "text",
+            "name": "expected_result",
+            "title": {
+                "en": "Expected result"
+            },
+            "hint":{
+                "en": "The result is always a array containing the matches of the XPath expression"
+            },
+            "placeholder": {
+                "en": "<title>foo bar</title>"
+            }
+        }
+    ]
+}

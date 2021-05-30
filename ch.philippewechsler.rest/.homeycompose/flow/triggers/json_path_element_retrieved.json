@@ -1,0 +1,35 @@
+{
+    "title": {
+        "en": "A JSONPath operation found an element"
+    },
+    "hint": {
+        "en": "Gets triggered when the 'Apply JSONPath expression' flow card matched an element."
+    },
+    "args": [],
+    "tokens": [
+        {
+            "name": "element",
+            "type": "string",
+            "title": {
+                "en": "The matched element"
+            },
+            "example": "\"bar\""
+        },
+        {
+            "name": "count",
+            "type": "number",
+            "title": {
+                "en": "The total amount of found matches"
+            },
+            "example": 1
+        },
+        {
+            "name": "index",
+            "type": "number",
+            "title": {
+                "en": "The index of the current match"
+            },
+            "example": 1
+        }
+    ]
+}

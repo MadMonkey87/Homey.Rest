@@ -1,0 +1,33 @@
+{
+    "title": {
+        "en": "Apply JSONPath expression"
+    },
+    "hint": {
+        "en": "Applies a JSONPath expression on a Json. Important: there are separate trigger cards available where you can handle the result of the operation!"
+    },
+    "titleFormatted": {
+        "en": "Apply [[path]] on Json [[json]]"
+    },
+    "args": [
+        {
+            "type": "text",
+            "name": "json",
+            "title": {
+                "en": "Json"
+            },
+            "placeholder": {
+                "en": "{\n    \"foo\" : \"bar\"\n}"
+            }
+        },
+        {
+            "type": "text",
+            "name": "path",
+            "title": {
+                "en": "JSONPath expression"
+            },
+            "placeholder": {
+                "en": "$.foo"
+            }
+        }
+    ]
+}

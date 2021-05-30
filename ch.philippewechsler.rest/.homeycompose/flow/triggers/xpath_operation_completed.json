@@ -1,0 +1,27 @@
+{
+    "title": {
+        "en": "XPath operation completed"
+    },
+    "hint": {
+        "en": "Gets triggered when the 'Apply XPath expression' flow card has completed it's operation."
+    },
+    "args": [],
+    "tokens": [
+        {
+            "name": "result",
+            "type": "string",
+            "title": {
+                "en": "An json array containing all the found matches"
+            },
+            "example": "[\"bar\"]"
+        },
+        {
+            "name": "count",
+            "type": "number",
+            "title": {
+                "en": "The total amount of found matches"
+            },
+            "example": 1
+        }
+    ]
+}
